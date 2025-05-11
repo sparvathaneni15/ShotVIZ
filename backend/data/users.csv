@@ -1,0 +1,3 @@
+id,email,name,password_hash
+1,coach1@example.com,Coach One,hashed_pw1
+2,coach2@example.com,Coach Two,hashed_pw2

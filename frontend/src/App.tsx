@@ -7,6 +7,7 @@ import DashboardPage from './pages/DashboardPage';
 import UploadPage from './pages/UploadPage';
 import VideoTaggingPage from './pages/VideoTaggingPage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import FilmPage from './pages/FilmPage';
 import './index.css';
 
 function App() {
@@ -28,6 +29,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <UploadPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/films"
+            element={
+              <ProtectedRoute>
+                <FilmPage />
               </ProtectedRoute>
             }
           />
