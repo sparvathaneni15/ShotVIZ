@@ -1,0 +1,21 @@
+# Core framework
+fastapi
+uvicorn[standard]        # ASGI server with reload, logging, HTTP/2, etc.
+
+# Database & ORM
+SQLAlchemy
+psycopg2-binary          # PostgreSQL driver
+alembic                  # Migrations
+
+# Settings & validation
+pydantic
+python-dotenv            # Load your .env into os.environ
+email-validator          # For Pydantic’s EmailStr
+python-multipart         # Form-data / file uploads support
+
+# Security (if you’re doing JWT auth)
+python-jose[cryptography]
+passlib[bcrypt]          # Password hashing
+
+# (Optional) Production server
+gunicorn

@@ -4,6 +4,8 @@ import MainLayout from '../components/layout/MainLayout';
 import VideoPlayer from '../components/tagging/VideoPlayer';
 import TagFlow from '../components/tagging/TagFlow';
 import TagTimeline from '../components/tagging/TagTimeline';
+import ActionMenu from '../components/tagging/ActionMenu';
+import PlayerRoleMenu from '../components/tagging/PlayerRoleMenu';
 
 interface Tag {
   color: string;
@@ -16,11 +18,38 @@ interface TimelineItem {
   tags: Tag[];
 }
 
+interface Player {
+  id: string;
+  name: string;
+  avatar: string;
+}
+
+interface Role {
+  id: string;
+  label: string;
+}
+
 const VideoTaggingPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [activeStep, setActiveStep] = useState(1);
+  const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
+  const [isPlayerRoleMenuOpen, setIsPlayerRoleMenuOpen] = useState(false);
   
-  // Mock timeline data
+  // Mock data
+  const players: Player[] = [
+    { id: '1', name: 'Marcus Johnson', avatar: 'https://randomuser.me/api/portraits/men/32.jpg' },
+    { id: '2', name: 'Sarah Williams', avatar: 'https://randomuser.me/api/portraits/women/44.jpg' },
+    { id: '3', name: 'Alex Thompson', avatar: 'https://randomuser.me/api/portraits/men/86.jpg' }
+  ];
+
+  const roles: Role[] = [
+    { id: '1', label: 'Ball Handler' },
+    { id: '2', label: 'Screener' },
+    { id: '3', label: 'Shooter' },
+    { id: '4', label: 'Defender' },
+    { id: '5', label: 'Rebounder' }
+  ];
+  
   const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([
     {
       id: '1',
@@ -42,31 +71,50 @@ const VideoTaggingPage: React.FC = () => {
   ]);
 
   const handleAddTag = () => {
-    // In a real app, this would open a tag creation modal
-    // For demo purposes, we'll just advance the step
-    setActiveStep(activeStep < 3 ? activeStep + 1 : 1);
+    setIsActionMenuOpen(true);
+  };
+
+  const handleSelectAction = (action: { id: string; label: string }) => {
+    setIsActionMenuOpen(false);
+    setIsPlayerRoleMenuOpen(true);
+  };
+
+  const handleAssignRole = (playerId: string, roleId: string) => {
+    // In a real app, you would update the state with the new role assignment
+    console.log(`Assigned role ${roleId} to player ${playerId}`);
   };
 
   const handleEditTag = (id: string) => {
-    // In a real app, this would open a tag editing modal
+    // In a real app, this would open the tag editing modal
     console.log(`Editing tag ${id}`);
   };
 
   return (
     <MainLayout title="Video Tagging">
-      {/* Video Player Section */}
       <VideoPlayer 
         videoSrc="https://images.pexels.com/photos/3755442/pexels-photo-3755442.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
         onAddTag={handleAddTag}
       />
 
-      {/* Tag Flowchart */}
       <TagFlow activeStep={activeStep} />
 
-      {/* Timeline */}
       <TagTimeline 
         items={timelineItems}
         onEdit={handleEditTag}
+      />
+
+      <ActionMenu
+        isOpen={isActionMenuOpen}
+        onClose={() => setIsActionMenuOpen(false)}
+        onSelectAction={handleSelectAction}
+      />
+
+      <PlayerRoleMenu
+        isOpen={isPlayerRoleMenuOpen}
+        onClose={() => setIsPlayerRoleMenuOpen(false)}
+        players={players}
+        roles={roles}
+        onAssignRole={handleAssignRole}
       />
     </MainLayout>
   );

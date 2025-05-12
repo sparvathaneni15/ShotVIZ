@@ -1,0 +1,40 @@
+name,description
+ball_handler,"Initiates or controls the possession (e.g., in pick & roll)"
+screener,Sets a screen for a teammate
+roller,Rolls to the basket after setting a screen
+popper,Pops out to the perimeter after a screen
+cutter,Makes a cut toward the basket or space
+passer,Makes the pass leading into the action
+shooter,Takes the shot attempt
+off_ball_guard,Guard away from the ball; often waiting for catch & shoot
+post_player,Posting up or receiving in the post
+iso_player,Initiates isolation (1-on-1) play
+rebounder,Crashes the offensive glass
+handoff_giver,Initiates dribble handoff
+handoff_receiver,Receives the ball in a DHO
+on_ball_defender,Guards the ball-handler
+screener_defender,Defends the player setting a screen
+help_defender,Rotates to provide help defense
+closeout_defender,Recovers to challenge a shooter
+rim_protector,Protects the paint and contests shots at the rim
+switch_defender,Assigned to a new player after a switch
+trap_defender_1,First player in a double team
+trap_defender_2,Second player in a double team
+tag_defender,Tags the roller in pick & roll defense
+recovering_defender,Chasing after a blown assignment or rotation
+trailer,Following the play in transition
+primary_break_ball_handler,Pushes the ball in transition
+wing_runner,Sprints wide for spacing or corner 3
+rim_runner,Sprints directly to the rim
+transition_defender,Protects the paint or stops the ball in transition
+inbounder,Passes the ball in from out of bounds
+inbound_receiver,Receives the inbounds pass
+foul_committer,Commits the foul
+fouled_player,Gets fouled
+turnover_committer,Turns the ball over
+stealer,Player who steals the ball
+blocker,Blocks a shot
+screen_navigator,Navigates around or through a screen
+screen_rejector,Ball-handler who rejects the screen
+last_touch_offense,Last player to touch the ball before turnover
+last_touch_defense,Last defender to touch before dead ball

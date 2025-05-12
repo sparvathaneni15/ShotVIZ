@@ -1,3 +1,6 @@
-id,email,name,password_hash
-1,coach1@example.com,Coach One,hashed_pw1
-2,coach2@example.com,Coach Two,hashed_pw2
+email,name,password_hash,created_at
+coach.james@example.com,James Carlisle,$2b$12$K3uXAlQe6KbWb1UlKf.L8O5OQwEdnpWvby9UvPqR2q0oQwph2vWaG,2025-05-01 08:30:00+00
+alex.mendoza@example.com,Alex Mendoza,$2b$12$a8hNsx3hZqPiwmE/hJUzQOx2zBml6jz3zpA9LzGdMNwlzDe8XbRzq,2025-05-02 09:10:00+00
+tkim@example.com,Taylor Kim,$2b$12$0gKxH6rLPcFZ5qqDjL9IleKEzMZ1G0BcZdq2ZTwOjYj81h71cFtlu,2025-05-03 11:20:00+00
+rachel.choi@example.com,Rachel Choi,$2b$12$nKUh8EaGqrfy3jqX5BOSFevPxXFlrz5WTfNoFY9DF2Vz5mBX0pEbi,2025-05-04 14:45:00+00
+coach.liam@example.com,Liam Rhodes,$2b$12$uTwL1c8Uy/YgWc0LOsxX1eZrr9UeyZw8zUVFs7ayYQfW9cT9Y6VUe,2025-05-05 07:55:00+00

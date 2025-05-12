@@ -1,4 +1,6 @@
-id,uploaded_by,session_date,video_url,notes
-1,1,2025-05-01,https://example.com/video1.mp4,Morning practice
-2,1,2025-05-03,https://example.com/video2.mp4,Skills session
-3,2,2025-05-02,https://example.com/video3.mp4,Scrimmage
+uploaded_by,session_date,video_url,notes,created_at
+1,2025-04-28,https://s3.amazonaws.com/basketball-practice/2025-04-28.mp4,Focus on transition defense,2025-04-28 17:45:00+00
+2,2025-04-30,https://s3.amazonaws.com/basketball-practice/2025-04-30.mp4,Zone offense drills,2025-04-30 12:10:00+00
+1,2025-05-01,https://s3.amazonaws.com/basketball-practice/2025-05-01.mp4,Emphasis on ball screen reads,2025-05-01 09:30:00+00
+3,2025-05-02,https://s3.amazonaws.com/basketball-practice/2025-05-02.mp4,Defensive rebounding focus,2025-05-02 11:00:00+00
+1,2025-05-05,https://s3.amazonaws.com/basketball-practice/2025-05-05.mp4,End-of-game scenario drills,2025-05-05 15:20:00+00

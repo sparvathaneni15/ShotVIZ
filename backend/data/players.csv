@@ -1,2 +1,11 @@
-first_name,last_name,jersey_no,height,weight,position,shooting_hand,year
-
+jersey_no,first_name,last_name,position,shooting_hand,year,height,weight
+1,Jordan,Williams,G,R,2023,6'2,185
+2,Malik,Johnson,G,L,2024,6'1,175
+3,Chris,Anderson,F,R,2023,6'6,205
+4,Drew,Martin,F,L,2025,6'7,210
+5,Isaiah,Nguyen,C,R,2024,6'10,240
+6,Tyler,Brown,G,R,2023,6'3,190
+7,Kyle,Robinson,F,R,2025,6'8,215
+8,Marcus,Wright,C,L,2023,7'0,250
+9,Aiden,Lee,G,L,2024,6'0,170
+10,Noah,Davis,F,R,2025,6'5,200
