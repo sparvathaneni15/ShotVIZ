@@ -1,14 +1,22 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
 # --- Import your DB and models so you can auto-create tables ---
-from backend.app.database import engine, Base
-import backend.app.models as models
+from app.dependencies import get_db
+from sqlalchemy.orm import Session
+from app.database import engine, Base
+import app.models as models
 
 # --- Import your routers (each handles one slice of your API) ---
-from routers import users, players, sessions, actions, results, shots
+from app.routers import (users, 
+                         players, 
+                         practice_sessions, 
+                         action_names, 
+                         result_names, 
+                         shot_names, 
+                         role_types)
 
 # --- Create all tables (only for dev; in prod use migrations) ---
 Base.metadata.create_all(bind=engine)
@@ -23,7 +31,7 @@ app = FastAPI(
 
 # --- CORS (allow your frontend origin to talk to this API) ---
 origins = [
-    os.getenv("FRONTEND_URL", "http://localhost:3000"),
+    os.getenv("FRONTEND_URL", "http://localhost:5173"),
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -34,17 +42,19 @@ app.add_middleware(
 )
 
 # --- Mount each router on its path prefix ---
-app.include_router(users.router,     prefix="/users",    tags=["users"])
-app.include_router(players.router,   prefix="/players",  tags=["players"])
-app.include_router(sessions.router,  prefix="/sessions", tags=["sessions"])
-app.include_router(actions.router,   prefix="/actions",  tags=["actions"])
-app.include_router(results.router,   prefix="/results",  tags=["results"])
-app.include_router(shots.router,     prefix="/shots",    tags=["shots"])
+app.include_router(users.router)
+app.include_router(players.router)
+app.include_router(practice_sessions.router)
+app.include_router(action_names.router)
+app.include_router(result_names.router)
+app.include_router(shot_names.router)
+app.include_router(role_types.router)
 
 # --- A simple health-check or root endpoint ---
 @app.get("/", summary="Service health check")
 async def root():
     return {"status": "ok", "message": "Practice Analytics API is running"}
+
 
 # --- Optional: run with `python main.py` locally ---
 if __name__ == "__main__":

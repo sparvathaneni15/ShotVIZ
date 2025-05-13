@@ -8,7 +8,7 @@ psycopg2-binary          # PostgreSQL driver
 alembic                  # Migrations
 
 # Settings & validation
-pydantic
+pydantic_settings
 python-dotenv            # Load your .env into os.environ
 email-validator          # For Pydantic’s EmailStr
 python-multipart         # Form-data / file uploads support

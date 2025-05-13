@@ -7,7 +7,7 @@ import DashboardPage from './pages/DashboardPage';
 import UploadPage from './pages/UploadPage';
 import VideoTaggingPage from './pages/VideoTaggingPage';
 import AnalyticsPage from './pages/AnalyticsPage';
-import FilmPage from './pages/FilmPage';
+import FilmPage from './pages/PracticeSessionPage';
 import './index.css';
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
             }
           />
           <Route
-            path="/films"
+            path="/practice-sessions"
             element={
               <ProtectedRoute>
                 <FilmPage />

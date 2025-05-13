@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, Date, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, Date, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
-from backend.app.database import Base
+from app.database import Base
 import datetime
 
 
@@ -13,9 +13,6 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
-    practice_sessions = relationship("PracticeSession", back_populates="user")
-
-
 class Player(Base):
     __tablename__ = "players"
 
@@ -26,7 +23,8 @@ class Player(Base):
     position = Column(String)
     shooting_hand = Column(String)
     year = Column(String)
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    height = Column(String)
+    weight = Column(String)
 
 
 class PracticeSession(Base):
@@ -36,16 +34,16 @@ class PracticeSession(Base):
     uploaded_by = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     session_date = Column(Date, nullable=False)
     video_url = Column(String, nullable=False)
+    notes = Column(Text)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
-    user = relationship("User", back_populates="practice_sessions")
-
-
-class RoleType(Base):
-    __tablename__ = "role_types"
+class ActionTypes(Base):
+    __tablename__ = "action_types"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True, nullable=False)
-    description = Column(Text)
+    action_name_id = Column(Integer, ForeignKey("action_name.id", ondelete="CASCADE"), nullable=False)
+    role_type_id = Column(Integer, ForeignKey("role_types.id", ondelete="CASCADE"), nullable=False)
+    player_id = Column(Integer, ForeignKey("players.id", ondelete="CASCADE"), nullable=False)
 
 
 class ActionName(Base):
@@ -55,15 +53,57 @@ class ActionName(Base):
     name = Column(String, unique=True, nullable=False)
 
 
+class RoleType(Base):
+    __tablename__ = "role_types"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, nullable=False)
+    description = Column(Text)
+
+class ResultTypes(Base):
+    __tablename__ = "result_types"
+
+    id = Column(Integer, primary_key=True, index=True)
+    result_name_id = Column(Integer, ForeignKey("result_name.id", ondelete="CASCADE"), nullable=False)
+    player_id = Column(Integer, ForeignKey("players.id", ondelete="CASCADE"), nullable=False)
+
 class ResultName(Base):
     __tablename__ = "result_name"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False)
 
+class ShotDetails(Base):
+    __tablename__ = "shot_details"
+
+    id = Column(Integer, primary_key=True, index=True)
+    shot_name_id = Column(Integer, ForeignKey("shot_names.id", ondelete="CASCADE"), nullable=False)
+    x_coordinate = Column(Integer, nullable=False)
+    y_coordinate = Column(Integer, nullable=False)
+    made = Column(Boolean, nullable=False)
 
 class ShotName(Base):
     __tablename__ = "shot_names"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False)
+
+class TagInstances(Base):
+    __tablename__ = "tag_instances"
+
+    id = Column(Integer, primary_key=True, index=True)
+    practice_session_id = Column(Integer, ForeignKey("practice_sessions.id", ondelete="CASCADE"), nullable=False)
+    start_time = Column(Integer, nullable=False)
+    end_time = Column(Integer, nullable=False)
+    action_type_id = Column(Integer, ForeignKey("action_types.id", ondelete="CASCADE"), nullable=False)
+    result_type_id = Column(Integer, ForeignKey("result_types.id", ondelete="CASCADE"), nullable=False)
+    occurred_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class ShotAttempt(Base):
+    __tablename__ = "shot_attempts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    result_type_id = Column(Integer, ForeignKey("result_types.id", ondelete="CASCADE"), nullable=False)
+    player_id = Column(Integer, ForeignKey("players.id", ondelete="CASCADE"), nullable=False)
+    shot_details_id = Column(Integer, ForeignKey("shot_details.id", ondelete="CASCADE"), nullable=False)

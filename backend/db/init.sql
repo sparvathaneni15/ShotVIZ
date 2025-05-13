@@ -62,7 +62,7 @@ CREATE TABLE result_name (
 );
 
 -- Shot Types (only used when result = shot_attempt)
-CREATE TABLE shot_types (
+CREATE TABLE shot_details (
   id             SERIAL PRIMARY KEY,
   shot_name_id   INTEGER NOT NULL REFERENCES shot_names(id) ON DELETE CASCADE,  -- e.g. "fadeaway", "spot-up"
   x_coord             NUMERIC NOT NULL,           -- e.g. court X
@@ -88,7 +88,7 @@ CREATE TABLE tag_instances (
 );
 
 -- Shot‐Attempt Details
-CREATE TABLE shot_attempt_details (
+CREATE TABLE shot_attempts (
   result_type_id  INTEGER PRIMARY KEY REFERENCES result_types(id) ON DELETE CASCADE,
   player_id       INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE,
   shot_type_id    INTEGER NOT NULL REFERENCES shot_types(id) ON DELETE CASCADE

@@ -11,12 +11,34 @@ const LoginPage: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real app, you would authenticate against a backend
-    // For demo purposes, we're just navigating to the dashboard
-    navigate('/');
-  };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch('http://localhost:8000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    if (!response.ok) {
+      throw new Error('Invalid credentials');
+    }
+
+    const data = await response.json();
+    console.log('Login successful:', data);
+    navigate('/'); // Redirect after successful login
+  } catch (error) {
+    console.error('Login failed:', error);
+    if (error instanceof Error) {
+      alert('Login failed: ' + error.message);
+    } else {
+      alert('Login failed: An unknown error occurred');
+    }
+  }
+};
 
   return (
     <main className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 transition-colors duration-300">

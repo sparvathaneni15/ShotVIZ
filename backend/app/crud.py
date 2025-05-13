@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-import backend.app.models as models, backend.app.schemas as schemas
+import app.models as models, app.schemas as schemas
 import datetime
 
 # --- User CRUD ---

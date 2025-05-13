@@ -4,8 +4,10 @@ from typing import List, Optional
 
 # --- Practice Session Schemas ---
 class PracticeSessionBase(BaseModel):
+    id: int
     session_date: date
     video_url: str
+    notes: Optional[str]
 
 class PracticeSessionCreate(PracticeSessionBase):
     uploaded_by: int
