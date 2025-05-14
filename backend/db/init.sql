@@ -31,65 +31,65 @@ CREATE TABLE practice_sessions (
   UNIQUE (uploaded_by, session_date)
 );
 
--- Action Types (e.g. “ball screen”, “dribble hand-off”)
-CREATE TABLE action_types (
-  id             SERIAL PRIMARY KEY,
-  action_name_id INTEGER UNIQUE NOT NULL REFERENCES action_name(id) ON DELETE CASCADE,  -- e.g. "ball screen", "dribble hand-off"
-  role_id    INTEGER NOT NULL REFERENCES role_types(id) ON DELETE CASCADE,  -- e.g. 'ball_handler', 'screener', 'defender1', etc.
-  player_id INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE
-);
-
-CREATE TABLE action_name (
+CREATE TABLE actions (
     id            SERIAL PRIMARY KEY,
-    name           TEXT UNIQUE NOT NULL  -- e.g. "ball screen", "dribble hand-off"
+    name           TEXT UNIQUE NOT NULL,  -- e.g. "ball screen", "dribble hand-off"
+    description    TEXT NOT NULL  -- e.g. "A player sets a screen for the ball handler"
 );
 
-CREATE TABLE role_types (
+CREATE TABLE roles (
     id             SERIAL PRIMARY KEY,
     name           TEXT UNIQUE NOT NULL,  -- e.g. "ball_handler", "screener", "defender1"
     description    TEXT NOT NULL  -- e.g. "The player who has the ball and is making the play"
 );
--- Result Types (e.g. “shot_attempt”, “turnover”, “assist”)
-CREATE TABLE result_types (
-  id             SERIAL PRIMARY KEY,
-  result_name_id INTEGER UNIQUE NOT NULL REFERENCES result_name(id) ON DELETE CASCADE,  -- e.g. "shot_attempt", "turnover", "assist"
-  player_id INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE
-);
 
-CREATE TABLE result_name (
+CREATE TABLE results (
     id            SERIAL PRIMARY KEY,
     name           TEXT UNIQUE NOT NULL  -- e.g. "shot_attempt", "turnover", "assist"
 );
 
--- Shot Types (only used when result = shot_attempt)
-CREATE TABLE shot_details (
-  id             SERIAL PRIMARY KEY,
-  shot_name_id   INTEGER NOT NULL REFERENCES shot_names(id) ON DELETE CASCADE,  -- e.g. "fadeaway", "spot-up"
-  x_coord             NUMERIC NOT NULL,           -- e.g. court X
-  y_coord             NUMERIC NOT NULL,           -- e.g. court Y
-  made                BOOLEAN NOT NULL
-);
-
-CREATE TABLE shot_names (
+CREATE TABLE shots (
     id            SERIAL PRIMARY KEY,
     name           TEXT UNIQUE NOT NULL  -- e.g. "fadeaway", "spot-up"
 );
 
--- Tagged Actions
-CREATE TABLE tag_instances (
+CREATE TABLE shot_details (
+    id            SERIAL PRIMARY KEY,
+    tag_id        INTEGER NOT NULL REFERENCES tag_action_result(id) ON DELETE CASCADE,
+    player_id    INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE,
+    distance    NUMERIC NOT NULL,  -- e.g. 15.0 (feet)
+    made     BOOLEAN NOT NULL,  -- e.g. true/false
+    created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE tag_action_result (
   id               SERIAL PRIMARY KEY,
   practice_sessions_id INTEGER NOT NULL REFERENCES practice_sessions(id) ON DELETE CASCADE,
   start_time       NUMERIC NOT NULL,  -- e.g. 12.34 (seconds)
   end_time         NUMERIC NOT NULL,  -- e.g. 15.67 (seconds)
-  action_type_id   INTEGER NOT NULL REFERENCES action_types(id) ON DELETE CASCADE,
-  result_type_id   INTEGER NOT NULL REFERENCES result_types(id) ON DELETE CASCADE,
+  action_id   INTEGER NOT NULL REFERENCES actions(id) ON DELETE CASCADE,
+  result_id   INTEGER NOT NULL REFERENCES results(id) ON DELETE CASCADE,
+  shot_id     INTEGER REFERENCES shots(id) ON DELETE CASCADE,
   occurred_at      TIMESTAMPTZ NOT NULL,  -- absolute timestamp in video/session
   created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Shot‐Attempt Details
-CREATE TABLE shot_attempts (
-  result_type_id  INTEGER PRIMARY KEY REFERENCES result_types(id) ON DELETE CASCADE,
-  player_id       INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE,
-  shot_type_id    INTEGER NOT NULL REFERENCES shot_types(id) ON DELETE CASCADE
+CREATE TABLE tag_players (
+  id SERIAL PRIMARY KEY,
+  tag_id INTEGER REFERENCES tag_action_result(id) ON DELETE CASCADE,
+  role_id INTEGER REFERENCES roles(id),
+  player_id INTEGER REFERENCES players(id)
+);
+
+CREATE TABLE stats (
+    id SERIAL PRIMARY KEY,
+    practice_session_id INTEGER NOT NULL REFERENCES practice_sessions(id) ON DELETE CASCADE,
+    player_id INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE,
+    points INTEGER DEFAULT 0,
+    assists INTEGER DEFAULT 0,
+    rebounds INTEGER DEFAULT 0,
+    steals INTEGER DEFAULT 0,
+    turnovers INTEGER DEFAULT 0,
+    blocks INTEGER DEFAULT 0,
+    fouls INTEGER DEFAULT 0
 );

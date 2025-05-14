@@ -7,8 +7,9 @@ import DashboardPage from './pages/DashboardPage';
 import UploadPage from './pages/UploadPage';
 import VideoTaggingPage from './pages/VideoTaggingPage';
 import AnalyticsPage from './pages/AnalyticsPage';
-import FilmPage from './pages/PracticeSessionPage';
+import PracticeSessionPage from './pages/PracticeSessionPage';
 import './index.css';
+
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
             path="/practice-sessions"
             element={
               <ProtectedRoute>
-                <FilmPage />
+                <PracticeSessionPage />
               </ProtectedRoute>
             }
           />

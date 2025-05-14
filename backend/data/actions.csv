@@ -1,0 +1,76 @@
+name,description
+ball screen,A screen set by an offensive player for the ball handler to create space or a mismatch.
+dribble hand-off,A handoff where the ball handler gives the ball to a teammate in motion.
+isolation,An offensive play designed for one player to take on a defender one-on-one.
+pick and pop,A ball screen where the screener pops out to the perimeter for a shot instead of rolling.
+pick and roll,A ball screen followed by the screener rolling to the basket.
+post-up,A play where a player backs down a defender near the basket to score.
+off-ball screen,A screen set away from the ball to free up a teammate.
+flare screen,A screen that directs the cutter away from the ball to create space on the perimeter.
+down screen,A screen set facing down toward the baseline to free up a player.
+cross screen,A screen set horizontally across the lane
+elevator screen,Two screeners close together open up to allow a shooter to cut through
+backdoor cut,An offensive cut behind the defender toward the basket
+V-cut,A cut where the player moves in a V-shaped pattern to shake a defender and get open.
+L-cut,A sharp angled cut that resembles the shape of an “L” to get open on the wing.
+curl cut,A cut around a screen in a curved path toward the basket.
+banana cut,A wide
+shallow cut,A soft angle cut across the top of the ke
+cut and replace,A player cuts and is replaced by a teammate filling the vacated spot.
+split action,Two offensive players interact
+drive and kick,A player drives to the basket and passes out to a shooter on the perimeter.
+kick out,A pass from the paint or drive out to an open teammate beyond the arc.
+skip pass,A long pass across the court
+handoff,Directly handing the ball to a teammate
+relocation,Moving to a new spot after passing
+give and go,A pass followed immediately by a cut to the basket to receive a return pass.
+high-low pass,A pass from a high post player to a teammate in the low post.
+transition offense,Quick offensive play before the defense sets
+early offense,Actions taken in the first few seconds of a possession
+fast break,A quick offensive push after a rebound or turnover aiming to score before defense sets.
+secondary break,Organized transition offense after an initial fast break opportunity doesn’t yield a score.
+offensive rebound,Gaining possession of the ball after a missed shot by your own team.
+putback,Scoring immediately after securing an offensive rebound.
+on-ball defense,Guarding the player with the ball.
+help defense,Providing support when a teammate is beaten off the dribble.
+closeout,Quickly defending a shooter after rotating or recovering.
+switch,Exchanging defensive assignments
+hedge,Temporarily stepping out on a screen to delay the ball handler.
+drop coverage,Defensive coverage where the big man stays near the basket during pick-and-rolls.
+ICE coverage,Pick-and-roll defense where the ball handler is forced away from the screen.
+trap,Double-teaming a ball handler to force a turnover.
+double team,Two defenders guarding one offensive player.
+zone defense,Defensive system where players guard areas of the floor instead of individuals.
+man-to-man defense,Each defender is responsible for guarding a specific player.
+full court press,Defensive pressure applied over the entire court.
+half court press,Defensive pressure starting at half court.
+deny defense,Actively preventing the offensive player from receiving the ball.
+box out,Positioning oneself between the opponent and the basket to secure a rebound.
+defensive rebound,Gaining possession of a missed shot by the opposing team.
+contest shot,Challenging a shot to reduce the shooter’s accuracy.
+block,Deflecting or stopping a shot on its way to the basket.
+steal,Taking the ball away from the offense through anticipation or pressure.
+take charge,Absorbing contact while establishing position to draw an offensive foul.
+defensive rotation,Team defensive adjustments and switches to cover open players after help defense.
+dig,Temporary help on a post player without fully committing.
+tag roller,Briefly bumping or tagging the screener rolling to the basket in pick-and-roll.
+recover,Returning to your assigned player after providing help defense.
+scramble,Rapid defensive movements to recover after a breakdown or rotation.
+timeout,A stoppage of play called by a coach or player to regroup or strategize.
+technical foul,A non-contact violation of the rules
+flagrant foul,A severe foul involving excessive contact or intent to injure.
+offensive foul,A foul committed by the player in possession of the ball or setting an illegal screen.
+defensive foul,A foul committed by a defender
+turnover,Loss of possession due to a mistake or violation.
+dead ball,A moment when play is stopped and the ball is not live.
+jump ball,A method to start or resume play by tossing the ball into the air between two players.
+inbound play,A play initiated from an out-of-bounds pass to start or restart play.
+sideline inbound,An inbounds play from the sideline
+baseline inbound,An inbounds play from the baseline
+end of quarter play,A designed play run near the end of a period.
+buzzer beater,A shot made just before the game or quarter clock expires.
+shot fake,A deceptive move to make a defender jump or shift before attempting a shot.
+pass fake,A move to trick the defender into reacting to a pass that doesn't happen.
+ball reversal,Swinging the ball from one side of the court to the other.
+re-screen,Setting a second screen
+reset,Pulling the ball out to reorganize or restart the offensive possession.
