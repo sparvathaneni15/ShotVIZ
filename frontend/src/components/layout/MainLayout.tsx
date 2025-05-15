@@ -14,7 +14,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, title, showUploadButt
   const user = {
     name: 'Coach Thompson',
     role: 'Head Coach',
-    avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
   };
 
   return (

@@ -13,7 +13,12 @@ import app.models as models
 # --- Import your routers (each handles one slice of your API) ---
 from app.routers import (users, 
                          players, 
-                         practice_sessions)
+                         practice_sessions,
+                         shots,
+                         tag_action_result,
+                         actions,
+                         results,
+                         roles)
 
 # --- Create all tables (only for dev; in prod use migrations) ---
 Base.metadata.create_all(bind=engine)
@@ -46,6 +51,7 @@ app.include_router(actions.router)
 app.include_router(results.router)
 app.include_router(shots.router)
 app.include_router(roles.router)
+app.include_router(tag_action_result.router)
 
 # --- A simple health-check or root endpoint ---
 @app.get("/", summary="Service health check")

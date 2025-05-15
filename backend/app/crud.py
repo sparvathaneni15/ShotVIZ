@@ -128,3 +128,18 @@ def create_shot_name(db: Session, shot: schemas.ShotNameCreate):
     db.commit()
     db.refresh(db_shot)
     return db_shot
+
+
+# --- Tag Action Result CRUD ---
+def get_tag_action_result(db: Session, tag_id: int):
+    return db.query(models.TagActionResult).filter(models.TagActionResult.id == tag_id).first()
+
+def get_tag_action_results(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.TagActionResult).offset(skip).limit(limit).all()
+
+def create_tag_action_result(db: Session, tag: schemas.TagActionResultCreate):
+    db_tag = models.TagActionResult(**tag.dict())
+    db.add(db_tag)
+    db.commit()
+    db.refresh(db_tag)
+    return db_tag

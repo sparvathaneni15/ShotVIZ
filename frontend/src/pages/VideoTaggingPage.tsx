@@ -5,13 +5,24 @@ import VideoPlayer from '../components/tagging/VideoPlayer';
 import TagFlow from '../components/tagging/TagFlow';
 import TagTimeline from '../components/tagging/TagTimeline';
 import ActionMenu from '../components/tagging/ActionMenu';
-import Action from '../components/tagging/ActionMenu';
 import PlayerRoleMenu from '../components/tagging/PlayerRoleMenu';
+import ResultMenu from '../components/tagging/ResultMenu';
 import axios from 'axios';
 
 interface Tag {
   color: string;
   label: string;
+}
+
+// Payload interface for submitting tag action results
+interface TagActionResultPayload {
+  practice_sessions_id: number;
+  start_time: number;
+  end_time: number;
+  action_id: number;
+  result_id: number;
+  shot_id?: number;
+  occurred_at: string;
 }
 
 interface TimelineItem {
@@ -20,69 +31,15 @@ interface TimelineItem {
   tags: Tag[];
 }
 
-interface Player {
-  id: string;
-  name: string;
-  avatar: string;
-}
-
-interface Role {
-  id: string;
-  label: string;
-}
-
 const VideoTaggingPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [activeStep, setActiveStep] = useState(1);
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
   const [isPlayerRoleMenuOpen, setIsPlayerRoleMenuOpen] = useState(false);
-  
-  const [players, setPlayers] = useState<Player[]>([]);
-  const [roles, setRoles] = useState<Role[]>([]);
 
-  useEffect(() => {
-    const fetchPlayers = async () => {
-      try {
-        const response = await axios.get<Player[]>('http://localhost:8000/players/all');
-        setPlayers(response.data);
-      } catch (error) {
-        console.error('Failed to fetch players:', error);
-      }
-    };
+  // State to hold the tag payload temporarily
+  const [tagPayload, setTagPayload] = useState<Partial<TagActionResultPayload>>({});
 
-    const fetchRoles = async () => {
-      try {
-        const response = await fetch('/api/roles');
-        const data = await response.json();
-        setRoles(data);
-      } catch (error) {
-        console.error('Failed to fetch roles:', error);
-      }
-    };
-
-    fetchPlayers();
-    fetchRoles();
-  }, []);
-  
-  const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([
-    {
-      id: '1',
-      timestamp: '00:45',
-      tags: [
-        { color: 'bg-[#2D3092]/20 text-[#2D3092]', label: 'Offense' },
-        { color: 'bg-[#FFB81C]/20 text-[#FFB81C]', label: '3-Point Shot' },
-        { color: 'bg-green-500/20 text-green-500', label: 'Made' }
-      ]
-    },
-    {
-      id: '2',
-      timestamp: '01:15',
-      tags: [
-        { color: 'bg-[#2D3092]/20 text-[#2D3092]', label: 'Defense' },
-        { color: 'bg-[#FFB81C]/20 text-[#FFB81C]', label: 'Block' }
-      ]
-    }
-  ]);
 
   const handleAddTag = () => {
     setIsActionMenuOpen(true);
@@ -92,11 +49,25 @@ const VideoTaggingPage: React.FC = () => {
     setIsActionMenuOpen(false);
     setIsPlayerRoleMenuOpen(true);
   };
+    // Function to submit the tag payload to the backend
+  const submitTag = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/tag_action_result/', tagPayload);
+      console.log('Tag submitted successfully:', response.data);
+    } catch (error) {
+      console.error('Error submitting tag:', error);
+    }
+  };
+
 
   const handleAssignRole = (playerId: string, roleId: string) => {
     // In a real app, you would update the state with the new role assignment
     console.log(`Assigned role ${roleId} to player ${playerId}`);
+    // Placeholder: Trigger tag submission after assigning roles
+    submitTag();
   };
+
+
 
   const handleEditTag = (id: string) => {
     // In a real app, this would open the tag editing modal
@@ -112,11 +83,6 @@ const VideoTaggingPage: React.FC = () => {
 
       <TagFlow activeStep={activeStep} />
 
-      <TagTimeline 
-        items={timelineItems}
-        onEdit={handleEditTag}
-      />
-
       <ActionMenu
         isOpen={isActionMenuOpen}
         onClose={() => setIsActionMenuOpen(false)}
@@ -126,9 +92,11 @@ const VideoTaggingPage: React.FC = () => {
       <PlayerRoleMenu
         isOpen={isPlayerRoleMenuOpen}
         onClose={() => setIsPlayerRoleMenuOpen(false)}
-        players={players}
-        roles={roles}
         onAssignRole={handleAssignRole}
+        onOpenResultMenu={() => console.log('Result menu opened')}
+      />
+
+      <ResultMenu
       />
     </MainLayout>
   );

@@ -11,7 +11,7 @@ router = APIRouter(prefix="/roles", tags=["roles"])
 def create_role_type(role: schemas.RoleTypeCreate, db: Session = Depends(get_db)):
     return crud.create_role_type(db, role)
 
-@router.get("/", response_model=List[schemas.RoleBase])
+@router.get("/all", response_model=List[schemas.RoleBase])
 def read_role_types(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_role_types(db, skip=skip, limit=limit)
 

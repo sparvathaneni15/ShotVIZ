@@ -1,36 +1,33 @@
-import React from 'react';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 
-interface Action {
+interface Result {
   id: string;
   name: string;
-  description: string;
 }
 
-interface ActionMenuProps {
+interface ResultMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectAction: (action: Action) => void;
+  onSelectResult: (result: Result) => void;
 }
 
-const ActionMenu: React.FC<ActionMenuProps> = ({ isOpen, onClose, onSelectAction }) => {
-  const [actions, setActions] = useState<Action[]>([]);
+const ResultMenu: React.FC<ResultMenuProps> = ({ isOpen, onClose, onSelectResult }) => {
+  const [results, setResults] = useState<Result[]>([]);
 
-    useEffect(() => {
-    const fetchActions = async () => {
+  useEffect(() => {
+    const fetchResults = async () => {
       try {
-        const response = await axios.get<Action[]>('http://localhost:8000/actions/all');
-        setActions(response.data);
+        const response = await axios.get<Result[]>('http://localhost:8000/results/all');
+        setResults(response.data);
       } catch (error) {
-        console.error('Error fetching actions:', error);
+        console.error('Failed to fetch results:', error);
       }
     };
 
-    fetchActions();
+    fetchResults();
   }, []);
-
 
   return (
     <AnimatePresence>
@@ -51,7 +48,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ isOpen, onClose, onSelectAction
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           >
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-800 dark:text-white">Select Action</h2>
+              <h2 className="text-xl font-bold text-gray-800 dark:text-white">Select Result</h2>
               <button
                 onClick={onClose}
                 className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
@@ -62,15 +59,15 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ isOpen, onClose, onSelectAction
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              {actions.map(action => (
+              {results.map(result => (
                 <motion.button
-                  key={action.id}
-                  onClick={() => onSelectAction(action)}
-                  className="flex flex-col items-start justify-center p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-800 dark:text-white hover:bg-[#FFB81C]/10 hover:text-[#FFB81C] transition-colors"
+                  key={result.id}
+                  onClick={() => onSelectResult(result)}
+                  className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-left text-gray-800 dark:text-white hover:bg-[#FFB81C]/10 hover:text-[#FFB81C] transition-colors"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <div className="font-semibold">{action.name}</div>
+                  {result.name}
                 </motion.button>
               ))}
             </div>
@@ -81,4 +78,4 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ isOpen, onClose, onSelectAction
   );
 };
 
-export default ActionMenu;
+export default ResultMenu;

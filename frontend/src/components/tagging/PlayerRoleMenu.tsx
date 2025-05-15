@@ -5,24 +5,25 @@ import axios from 'axios';
 
 interface Player {
   id: string;
-  name: string;
-  avatar: string;
+  jersey_no: string;
+  first_name: string;
+  last_name: string;
+  position: string;
 }
 
 interface Role {
   id: string;
-  label: string;
+  name: string;
 }
 
 interface PlayerRoleMenuProps {
   isOpen: boolean;
   onClose: () => void;
-  players: Player[];
-  roles: Role[];
   onAssignRole: (playerId: string, roleId: string) => void;
+  onOpenResultMenu: () => void;
 }
 
-const PlayerRoleMenu: React.FC<PlayerRoleMenuProps> = ({isOpen, onClose, onAssignRole}) => {
+const PlayerRoleMenu: React.FC<PlayerRoleMenuProps> = ({isOpen, onClose, onAssignRole, onOpenResultMenu}) => {
   const [isPlayerRoleMenuOpen, setIsPlayerRoleMenuOpen] = useState(false);
     
     const [players, setPlayers] = useState<Player[]>([]);
@@ -40,9 +41,8 @@ const PlayerRoleMenu: React.FC<PlayerRoleMenuProps> = ({isOpen, onClose, onAssig
   
       const fetchRoles = async () => {
         try {
-          const response = await fetch('/api/roles');
-          const data = await response.json();
-          setRoles(data);
+          const response = await axios.get<Role[]>('http://localhost:8000/roles/all');
+          setRoles(response.data);
         } catch (error) {
           console.error('Failed to fetch roles:', error);
         }
@@ -51,11 +51,6 @@ const PlayerRoleMenu: React.FC<PlayerRoleMenuProps> = ({isOpen, onClose, onAssig
       fetchPlayers();
       fetchRoles();
     }, []);
-
-
-
-
-
 
   return (
     <AnimatePresence>
@@ -69,7 +64,7 @@ const PlayerRoleMenu: React.FC<PlayerRoleMenuProps> = ({isOpen, onClose, onAssig
             onClick={onClose}
           />
           <motion.div
-            className="fixed inset-x-0 bottom-0 bg-white dark:bg-gray-800 rounded-t-xl z-50 p-6"
+            className="fixed inset-x-0 bottom-0 bg-white dark:bg-gray-800 rounded-t-xl z-50 p-6 max-h-[80vh] overflow-y-auto"
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
@@ -86,35 +81,32 @@ const PlayerRoleMenu: React.FC<PlayerRoleMenuProps> = ({isOpen, onClose, onAssig
               </button>
             </div>
 
-            <div className="space-y-4">
-              {players.map(player => (
-                <div key={player.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                  <div className="flex items-center space-x-4 mb-3">
-                    <img
-                      src={player.avatar}
-                      alt={player.name}
-                      className="w-10 h-10 rounded-full"
-                    />
-                    <span className="font-medium text-gray-800 dark:text-white">
-                      {player.name}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {roles.map(role => (
-                      <motion.button
-                        key={role.id}
-                        onClick={() => onAssignRole(player.id, role.id)}
-                        className="px-3 py-1 bg-gray-200 dark:bg-gray-600 rounded-full text-sm text-gray-800 dark:text-white hover:bg-[#FFB81C]/10 hover:text-[#FFB81C] transition-colors"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        {role.label}
-                      </motion.button>
-                    ))}
-                  </div>
+          <div className="space-y-4">
+            {roles.map(role => (
+              <div key={role.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                <div className="font-semibold text-gray-800 dark:text-white mb-2">{role.name}</div>
+                <div className="max-h-48 overflow-y-auto space-y-2">
+                  {players.map(player => (
+                    <button
+                      key={player.id}
+                      onClick={() => onAssignRole(player.id, role.id)}
+                      className="flex items-center space-x-3 w-full text-left px-2 py-1 rounded hover:bg-[#FFB81C]/10 hover:text-[#FFB81C] transition-colors"
+                    >
+                      <span className="text-gray-800 dark:text-white">{player.first_name}</span>
+                    </button>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 text-center">
+            <button
+              onClick={onOpenResultMenu}
+              className="px-4 py-2 bg-[#FFB81C] text-white font-semibold rounded hover:bg-[#e6a700] transition-colors"
+            >
+              Assign Result
+            </button>
+          </div>
           </motion.div>
         </>
       )}

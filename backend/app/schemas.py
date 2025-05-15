@@ -112,3 +112,23 @@ class ShotNameRead(ShotBase):
 
     class Config:
         orm_mode = True
+
+# --- Tag Action Result Schemas ---
+class TagActionResultBase(BaseModel):
+    practice_sessions_id: int
+    start_time: float
+    end_time: float
+    action_id: int
+    result_id: int
+    shot_id: Optional[int]
+    occurred_at: datetime
+
+class TagActionResultCreate(TagActionResultBase):
+    pass
+
+class TagActionResultRead(TagActionResultBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
