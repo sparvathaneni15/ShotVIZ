@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 interface Player {
   id: string;
@@ -20,13 +22,41 @@ interface PlayerRoleMenuProps {
   onAssignRole: (playerId: string, roleId: string) => void;
 }
 
-const PlayerRoleMenu: React.FC<PlayerRoleMenuProps> = ({
-  isOpen,
-  onClose,
-  players,
-  roles,
-  onAssignRole
-}) => {
+const PlayerRoleMenu: React.FC<PlayerRoleMenuProps> = ({isOpen, onClose, onAssignRole}) => {
+  const [isPlayerRoleMenuOpen, setIsPlayerRoleMenuOpen] = useState(false);
+    
+    const [players, setPlayers] = useState<Player[]>([]);
+    const [roles, setRoles] = useState<Role[]>([]);
+  
+    useEffect(() => {
+      const fetchPlayers = async () => {
+        try {
+          const response = await axios.get<Player[]>('http://localhost:8000/players/all');
+          setPlayers(response.data);
+        } catch (error) {
+          console.error('Failed to fetch players:', error);
+        }
+      };
+  
+      const fetchRoles = async () => {
+        try {
+          const response = await fetch('/api/roles');
+          const data = await response.json();
+          setRoles(data);
+        } catch (error) {
+          console.error('Failed to fetch roles:', error);
+        }
+      };
+  
+      fetchPlayers();
+      fetchRoles();
+    }, []);
+
+
+
+
+
+
   return (
     <AnimatePresence>
       {isOpen && (

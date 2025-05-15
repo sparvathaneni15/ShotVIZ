@@ -7,8 +7,8 @@ interface TagFlowProps {
 
 const TagFlow: React.FC<TagFlowProps> = ({ activeStep }) => {
   const steps = [
-    { id: 1, label: 'Offense' },
-    { id: 2, label: 'Shot Type' },
+    { id: 1, label: 'Select Action' },
+    { id: 2, label: 'Assign Roles' },
     { id: 3, label: 'Result' }
   ];
 

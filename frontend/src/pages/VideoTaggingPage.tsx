@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
 import VideoPlayer from '../components/tagging/VideoPlayer';
 import TagFlow from '../components/tagging/TagFlow';
 import TagTimeline from '../components/tagging/TagTimeline';
 import ActionMenu from '../components/tagging/ActionMenu';
+import Action from '../components/tagging/ActionMenu';
 import PlayerRoleMenu from '../components/tagging/PlayerRoleMenu';
+import axios from 'axios';
 
 interface Tag {
   color: string;
@@ -35,20 +37,32 @@ const VideoTaggingPage: React.FC = () => {
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
   const [isPlayerRoleMenuOpen, setIsPlayerRoleMenuOpen] = useState(false);
   
-  // Mock data
-  const players: Player[] = [
-    { id: '1', name: 'Marcus Johnson', avatar: 'https://randomuser.me/api/portraits/men/32.jpg' },
-    { id: '2', name: 'Sarah Williams', avatar: 'https://randomuser.me/api/portraits/women/44.jpg' },
-    { id: '3', name: 'Alex Thompson', avatar: 'https://randomuser.me/api/portraits/men/86.jpg' }
-  ];
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
 
-  const roles: Role[] = [
-    { id: '1', label: 'Ball Handler' },
-    { id: '2', label: 'Screener' },
-    { id: '3', label: 'Shooter' },
-    { id: '4', label: 'Defender' },
-    { id: '5', label: 'Rebounder' }
-  ];
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const response = await axios.get<Player[]>('http://localhost:8000/players/all');
+        setPlayers(response.data);
+      } catch (error) {
+        console.error('Failed to fetch players:', error);
+      }
+    };
+
+    const fetchRoles = async () => {
+      try {
+        const response = await fetch('/api/roles');
+        const data = await response.json();
+        setRoles(data);
+      } catch (error) {
+        console.error('Failed to fetch roles:', error);
+      }
+    };
+
+    fetchPlayers();
+    fetchRoles();
+  }, []);
   
   const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([
     {
@@ -74,7 +88,7 @@ const VideoTaggingPage: React.FC = () => {
     setIsActionMenuOpen(true);
   };
 
-  const handleSelectAction = (action: { id: string; label: string }) => {
+  const handleSelectAction = (action: { id: string; name: string }) => {
     setIsActionMenuOpen(false);
     setIsPlayerRoleMenuOpen(true);
   };

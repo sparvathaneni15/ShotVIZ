@@ -1,9 +1,11 @@
 import React from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Action {
   id: string;
-  label: string;
+  name: string;
   category: string;
 }
 
@@ -14,16 +16,20 @@ interface ActionMenuProps {
 }
 
 const ActionMenu: React.FC<ActionMenuProps> = ({ isOpen, onClose, onSelectAction }) => {
-  const actions: Action[] = [
-    { id: '1', label: '3-Point Shot', category: 'Offense' },
-    { id: '2', label: 'Layup', category: 'Offense' },
-    { id: '3', label: 'Mid-Range Shot', category: 'Offense' },
-    { id: '4', label: 'Block', category: 'Defense' },
-    { id: '5', label: 'Steal', category: 'Defense' },
-    { id: '6', label: 'Rebound', category: 'Defense' },
-    { id: '7', label: 'Assist', category: 'Playmaking' },
-    { id: '8', label: 'Pick and Roll', category: 'Playmaking' }
-  ];
+  const [actions, setActions] = useState<Action[]>([]);
+
+    useEffect(() => {
+    const fetchActions = async () => {
+      try {
+        const response = await axios.get<Action[]>('http://localhost:8000/actions/all');
+        setActions(response.data);
+      } catch (error) {
+        console.error('Error fetching actions:', error);
+      }
+    };
+
+    fetchActions();
+  }, []);
 
   const categories = Array.from(new Set(actions.map(action => action.category)));
 
@@ -71,7 +77,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ isOpen, onClose, onSelectAction
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
-                          {action.label}
+                          {action.name}
                         </motion.button>
                       ))}
                   </div>

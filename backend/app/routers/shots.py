@@ -5,17 +5,17 @@ from typing import List
 from app import crud, schemas
 from app.dependencies import get_db
 
-router = APIRouter(prefix="/shot_names", tags=["shot_names"])
+router = APIRouter(prefix="/shots", tags=["shots"])
 
-@router.post("/", response_model=schemas.ShotNameBase, status_code=201)
+@router.post("/", response_model=schemas.ShotBase, status_code=201)
 def create_shot_name(shot: schemas.ShotNameCreate, db: Session = Depends(get_db)):
     return crud.create_shot_name(db, shot)
 
-@router.get("/", response_model=List[schemas.ShotNameBase])
+@router.get("/", response_model=List[schemas.ShotBase])
 def read_shot_names(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_shot_names(db, skip=skip, limit=limit)
 
-@router.get("/{shot_id}", response_model=schemas.ShotNameBase)
+@router.get("/{shot_id}", response_model=schemas.ShotBase)
 def read_shot_name(shot_id: int, db: Session = Depends(get_db)):
     db_shot = crud.get_shot_name(db, id=shot_id)
     if not db_shot:

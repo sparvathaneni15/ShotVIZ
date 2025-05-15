@@ -58,14 +58,14 @@ class PlayerRead(PlayerBase):
 
 
 # --- Role Type Schemas ---
-class RoleTypeBase(BaseModel):
+class RoleBase(BaseModel):
     name: str
     description: Optional[str]
 
-class RoleTypeCreate(RoleTypeBase):
+class RoleTypeCreate(RoleBase):
     pass
 
-class RoleTypeRead(RoleTypeBase):
+class RoleTypeRead(RoleBase):
     id: int
 
     class Config:
@@ -73,13 +73,13 @@ class RoleTypeRead(RoleTypeBase):
 
 
 # --- Action Name Schemas ---
-class ActionNameBase(BaseModel):
+class ActionBase(BaseModel):
     name: str
 
-class ActionNameCreate(ActionNameBase):
+class ActionNameCreate(ActionBase):
     pass
 
-class ActionNameRead(ActionNameBase):
+class ActionNameRead(ActionBase):
     id: int
 
     class Config:
@@ -87,13 +87,13 @@ class ActionNameRead(ActionNameBase):
 
 
 # --- Result Name Schemas ---
-class ResultNameBase(BaseModel):
+class ResultBase(BaseModel):
     name: str
 
-class ResultNameCreate(ResultNameBase):
+class ResultNameCreate(ResultBase):
     pass
 
-class ResultNameRead(ResultNameBase):
+class ResultNameRead(ResultBase):
     id: int
 
     class Config:
@@ -101,13 +101,13 @@ class ResultNameRead(ResultNameBase):
 
 
 # --- Shot Name Schemas ---
-class ShotNameBase(BaseModel):
+class ShotBase(BaseModel):
     name: str
 
-class ShotNameCreate(ShotNameBase):
+class ShotNameCreate(ShotBase):
     pass
 
-class ShotNameRead(ShotNameBase):
+class ShotNameRead(ShotBase):
     id: int
 
     class Config:

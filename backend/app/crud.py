@@ -62,68 +62,68 @@ def create_practice_session(db: Session, session: schemas.PracticeSessionCreate)
     return db_session
 
 
-# --- RoleType CRUD ---
+# --- Role CRUD ---
 def get_role_type(db: Session, role_id: int):
-    return db.query(models.RoleType).filter(models.RoleType.id == role_id).first()
+    return db.query(models.Role).filter(models.Role.id == role_id).first()
 
 
 def get_role_types(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.RoleType).offset(skip).limit(limit).all()
+    return db.query(models.Role).offset(skip).limit(limit).all()
 
 
 def create_role_type(db: Session, role: schemas.RoleTypeCreate):
-    db_role = models.RoleType(**role.dict())
+    db_role = models.Role(**role.dict())
     db.add(db_role)
     db.commit()
     db.refresh(db_role)
     return db_role
 
 
-# --- ActionName CRUD ---
+# --- Action CRUD ---
 def get_action_name(db: Session, action_id: int):
-    return db.query(models.ActionName).filter(models.ActionName.id == action_id).first()
+    return db.query(models.Action).filter(models.Action.id == action_id).first()
 
 
 def get_action_names(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.ActionName).offset(skip).limit(limit).all()
+    return db.query(models.Action).offset(skip).limit(limit).all()
 
 
 def create_action_name(db: Session, action: schemas.ActionNameCreate):
-    db_action = models.ActionName(**action.dict())
+    db_action = models.Action(**action.dict())
     db.add(db_action)
     db.commit()
     db.refresh(db_action)
     return db_action
 
 
-# --- ResultName CRUD ---
+# --- Result CRUD ---
 def get_result_name(db: Session, result_id: int):
-    return db.query(models.ResultName).filter(models.ResultName.id == result_id).first()
+    return db.query(models.Result).filter(models.Result.id == result_id).first()
 
 
 def get_result_names(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.ResultName).offset(skip).limit(limit).all()
+    return db.query(models.Result).offset(skip).limit(limit).all()
 
 
 def create_result_name(db: Session, result: schemas.ResultNameCreate):
-    db_result = models.ResultName(**result.dict())
+    db_result = models.Result(**result.dict())
     db.add(db_result)
     db.commit()
     db.refresh(db_result)
     return db_result
 
 
-# --- ShotName CRUD ---
+# --- Shot CRUD ---
 def get_shot_name(db: Session, shot_id: int):
-    return db.query(models.ShotName).filter(models.ShotName.id == shot_id).first()
+    return db.query(models.Shot).filter(models.Shot.id == shot_id).first()
 
 
 def get_shot_names(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.ShotName).offset(skip).limit(limit).all()
+    return db.query(models.Shot).offset(skip).limit(limit).all()
 
 
 def create_shot_name(db: Session, shot: schemas.ShotNameCreate):
-    db_shot = models.ShotName(**shot.dict())
+    db_shot = models.Shot(**shot.dict())
     db.add(db_shot)
     db.commit()
     db.refresh(db_shot)

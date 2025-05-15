@@ -1,5 +1,6 @@
 import os
 
+from app.routers import actions, results, roles, shots
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,11 +13,7 @@ import app.models as models
 # --- Import your routers (each handles one slice of your API) ---
 from app.routers import (users, 
                          players, 
-                         practice_sessions, 
-                         action_names, 
-                         result_names, 
-                         shot_names, 
-                         role_types)
+                         practice_sessions)
 
 # --- Create all tables (only for dev; in prod use migrations) ---
 Base.metadata.create_all(bind=engine)
@@ -45,10 +42,10 @@ app.add_middleware(
 app.include_router(users.router)
 app.include_router(players.router)
 app.include_router(practice_sessions.router)
-app.include_router(action_names.router)
-app.include_router(result_names.router)
-app.include_router(shot_names.router)
-app.include_router(role_types.router)
+app.include_router(actions.router)
+app.include_router(results.router)
+app.include_router(shots.router)
+app.include_router(roles.router)
 
 # --- A simple health-check or root endpoint ---
 @app.get("/", summary="Service health check")
