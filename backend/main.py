@@ -3,6 +3,8 @@ import os
 from app.routers import actions, results, roles, shots
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+# app.mount("/videos", StaticFiles(directory="uploaded_videos"), name="videos")
 
 # --- Import your DB and models so you can auto-create tables ---
 from app.dependencies import get_db
@@ -18,7 +20,8 @@ from app.routers import (users,
                          tag_action_result,
                          actions,
                          results,
-                         roles)
+                         roles,
+                         upload)
 
 # --- Create all tables (only for dev; in prod use migrations) ---
 Base.metadata.create_all(bind=engine)
@@ -52,6 +55,7 @@ app.include_router(results.router)
 app.include_router(shots.router)
 app.include_router(roles.router)
 app.include_router(tag_action_result.router)
+app.include_router(upload.router)
 
 # --- A simple health-check or root endpoint ---
 @app.get("/", summary="Service health check")

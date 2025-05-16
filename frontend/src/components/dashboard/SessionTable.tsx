@@ -4,19 +4,18 @@ import { useNavigate } from 'react-router-dom';
 
 interface PracticeSession {
   id: number;
-  date: string;
-  videoUrl: string;
+  session_date: string;
+  video_url: string;
   notes: string;
 }
 
 interface SessionTableProps {
-  PracticeSessions: PracticeSession[];
+  practiceSessions: PracticeSession[];
 }
 
-const SessionTable: React.FC<SessionTableProps> = ({ PracticeSessions }) => {
-  // Sort sessions by date (newest first), then take the top 3
-  const recentSessions = [...PracticeSessions]
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+const SessionTable: React.FC<SessionTableProps> = ({ practiceSessions }) => {
+  const recentSessions = [...practiceSessions]
+    .sort((a, b) => new Date(b.session_date).getTime() - new Date(a.session_date).getTime())
     .slice(0, 3);
 
   return (
@@ -32,7 +31,7 @@ const SessionTable: React.FC<SessionTableProps> = ({ PracticeSessions }) => {
           {recentSessions.map((session) => (
             <tr key={session.id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                {new Date(session.date).toLocaleDateString()}
+                {session.session_date}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                 {session.notes}

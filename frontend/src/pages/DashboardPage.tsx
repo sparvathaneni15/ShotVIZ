@@ -4,10 +4,11 @@ import PerformerCard from '../components/dashboard/PerformerCard';
 import ActionCard from '../components/dashboard/ActionCard';
 import SessionTable from '../components/dashboard/SessionTable';
 import { motion } from 'framer-motion';
+import { i } from 'framer-motion/client';
 
 const DashboardPage: React.FC = () => {
 
-  const [sessions, setSessions] = useState<PracticeSession[]>([]);
+  const [sessions, setSessions] = useState<[]>([]);
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -26,8 +27,10 @@ const DashboardPage: React.FC = () => {
   return (
     <MainLayout title='Dashboard' showUploadButton>
       <div className="flex">
-          <SessionTable PracticeSessions={sessions} />
-        </div>
+          <SessionTable practiceSessions={sessions} />
+      </div>
+      <div className="flex">
+      </div> 
     </MainLayout>
   );
 };

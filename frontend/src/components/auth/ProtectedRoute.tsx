@@ -6,11 +6,12 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  // In a real application, you would check if the user is authenticated
-  // For demo purposes, we're simulating an authenticated user
-  const isAuthenticated = true;
+  // const token = localStorage.getItem("token");
+  const token = true; // For testing purposes, replace with actual token retrieval logic
 
-  if (!isAuthenticated) {
+  // Optional: you can add token validation logic here (e.g., check expiration)
+
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
 

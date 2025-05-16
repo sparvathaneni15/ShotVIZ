@@ -20,25 +20,38 @@ const UploadPage: React.FC = () => {
     setSelectedFiles(files);
   };
 
-  const handleFormSubmit = (formData: FormData) => {
-    // Simulate upload process
+  const handleFormSubmit = async (formData: FormData) => {
+    if (!selectedFiles || selectedFiles.length === 0) return;
+
     setUploading(true);
-    
-    let currentProgress = 0;
-    const interval = setInterval(() => {
-      currentProgress += 5;
-      setProgress(currentProgress);
-      
-      if (currentProgress >= 100) {
-        clearInterval(interval);
-        setTimeout(() => {
-          // Reset form after "upload" completes
-          setUploading(false);
-          setSelectedFiles(null);
-          setProgress(0);
-        }, 1000);
+
+    const data = new FormData();
+    data.append('file', selectedFiles[0]);
+    data.append('date', formData.date);
+    data.append('sessionType', formData.sessionType);
+    data.append('tags', formData.tags);
+    data.append('notes', formData.notes);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/upload`, {
+        method: 'POST',
+        body: data,
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
       }
-    }, 300);
+
+      // Optional: handle server response if needed
+      const result = await response.json();
+      console.log('Upload successful:', result);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    } finally {
+      setUploading(false);
+      setSelectedFiles(null);
+      setProgress(0);
+    }
   };
 
   const handleCancel = () => {
