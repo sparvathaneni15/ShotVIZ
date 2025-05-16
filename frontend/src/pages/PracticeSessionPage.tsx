@@ -9,7 +9,7 @@ const PracticeSessionPage: React.FC = () => {
   const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
 
   return (
-    <MainLayout title="Practice Sessions" showUploadButton>
+    <MainLayout title="Library" showUploadButton>
       <DateRangeFilter
         startDate={startDate}
         endDate={endDate}

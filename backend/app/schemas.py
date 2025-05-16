@@ -132,3 +132,25 @@ class TagActionResultRead(TagActionResultBase):
 
     class Config:
         orm_mode = True
+
+# --- Stat Schemas ---
+class StatBase(BaseModel):
+    practice_session_id: int
+    player_id: int
+    points: int
+    assists: int
+    rebounds: int
+    steals: int
+    turnovers: int
+    blocks: int
+    fouls: int
+
+class StatCreate(StatBase):
+    pass
+
+class StatRead(StatBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        orm_mode = True

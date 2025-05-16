@@ -13,7 +13,7 @@ const DashboardPage: React.FC = () => {
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        const response = await fetch('http://localhost:8000/practice_sessions'); // adjust to your FastAPI route
+        const response = await fetch('http://localhost:8000/practice_sessions/'); // adjust to your FastAPI route
         const data = await response.json();
         setSessions(data);
       } catch (error) {
