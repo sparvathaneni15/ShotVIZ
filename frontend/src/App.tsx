@@ -8,6 +8,7 @@ import UploadPage from './pages/UploadPage';
 import VideoTaggingPage from './pages/VideoTaggingPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import PracticeSessionPage from './pages/PracticeSessionPage';
+import TeamPage from './pages/TeamPage';
 import './index.css';
 
 
@@ -54,6 +55,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AnalyticsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/team"
+            element={
+              <ProtectedRoute>
+                <TeamPage/>
               </ProtectedRoute>
             }
           />

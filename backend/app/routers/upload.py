@@ -1,21 +1,16 @@
-from fastapi import APIRouter, UploadFile, File, Depends
-from fastapi.responses import JSONResponse
+# routers/upload.py
+from fastapi import APIRouter, UploadFile, File, HTTPException
 import shutil
-import uuid
 import os
 
 router = APIRouter()
 
-UPLOAD_FOLDER = "uploaded_videos"
+UPLOAD_DIR = "uploaded_videos"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/upload")
 async def upload_video(file: UploadFile = File(...)):
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    filename = f"{uuid.uuid4()}_{file.filename}"
-    filepath = os.path.join(UPLOAD_FOLDER, filename)
-
-    with open(filepath, "wb") as buffer:
+    file_location = os.path.join(UPLOAD_DIR, file.filename)
+    with open(file_location, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
-
-    # Optionally insert file info into DB here
-    return JSONResponse({"filename": filename, "path": filepath})
+    return {"filename": file.filename, "path": file_location}
