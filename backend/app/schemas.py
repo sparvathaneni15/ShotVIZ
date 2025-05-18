@@ -11,9 +11,12 @@ class PracticeSessionBase(BaseModel):
 
 class PracticeSessionCreate(PracticeSessionBase):
     uploaded_by: int
+    session_date: date
+    video_url: str
+    notes: Optional[str]
 
 class PracticeSessionRead(PracticeSessionBase):
-    id: int
+
     uploaded_by: int
 
     class Config:

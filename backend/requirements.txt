@@ -19,3 +19,6 @@ passlib[bcrypt]          # Password hashing
 
 # (Optional) Production server
 gunicorn
+
+# AWS
+boto3                   # AWS SDK for Python

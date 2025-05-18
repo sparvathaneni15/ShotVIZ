@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
-interface UploadFormProps {
-  onSubmit: (formData: FormData) => void;
-  onCancel: () => void;
-  showProgress?: boolean;
-  progressPercentage?: number;
-  fileName?: string;
-}
-
-interface FormData {
+interface UploadFormData {
   date: string;
   sessionType: string;
   tags: string;
   notes: string;
+}
+
+interface UploadFormProps {
+  onSubmit: (formValues: UploadFormData) => Promise<void>;
+  onCancel: () => void;
+  showProgress?: boolean;
+  progressPercentage?: number;
+  fileName?: string;
 }
 
 const UploadForm: React.FC<UploadFormProps> = ({
@@ -23,7 +23,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
   progressPercentage = 0,
   fileName = ''
 }) => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<UploadFormData>({
     date: new Date().toISOString().split('T')[0],
     sessionType: 'Full Practice',
     tags: '',
@@ -62,37 +62,6 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:border-[#FFB81C] focus:ring-2 focus:ring-[#FFB81C] focus:ring-opacity-20 transition-all"
               />
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Session Type
-            </label>
-            <select
-              name="sessionType"
-              value={formData.sessionType}
-              onChange={handleChange}
-              className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:border-[#FFB81C] focus:ring-2 focus:ring-[#FFB81C] focus:ring-opacity-20 transition-all"
-            >
-              <option>Full Practice</option>
-              <option>Scrimmage</option>
-              <option>Drill Session</option>
-              <option>Game Review</option>
-            </select>
-          </div>
-
-          <div className="md:col-span-2 space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Session Tags
-            </label>
-            <input
-              type="text"
-              name="tags"
-              value={formData.tags}
-              onChange={handleChange}
-              placeholder="Add tags separated by commas"
-              className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:border-[#FFB81C] focus:ring-2 focus:ring-[#FFB81C] focus:ring-opacity-20 transition-all"
-            />
           </div>
 
           <div className="md:col-span-2 space-y-2">

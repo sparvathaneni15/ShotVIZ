@@ -8,6 +8,7 @@ interface UploadZoneProps {
 
 const UploadZone: React.FC<UploadZoneProps> = ({ onFilesSelected }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
@@ -25,6 +26,8 @@ const UploadZone: React.FC<UploadZoneProps> = ({ onFilesSelected }) => {
     setIsDragging(false);
     
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const names = Array.from(e.dataTransfer.files).map((file) => file.name);
+      setSelectedFileNames(names);
       onFilesSelected(e.dataTransfer.files);
     }
   };
@@ -37,6 +40,8 @@ const UploadZone: React.FC<UploadZoneProps> = ({ onFilesSelected }) => {
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
+      const names = Array.from(e.target.files).map((file) => file.name);
+      setSelectedFileNames(names);
       onFilesSelected(e.target.files);
     }
   };
@@ -90,6 +95,16 @@ const UploadZone: React.FC<UploadZoneProps> = ({ onFilesSelected }) => {
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
           Supported formats: MP4, MOV (max 4GB)
         </p>
+        {selectedFileNames.length > 0 && (
+          <div className="mt-6">
+            <p className="text-green-600 dark:text-green-400 font-medium">File(s) selected:</p>
+            <ul className="text-sm text-gray-700 dark:text-gray-300 mt-1">
+              {selectedFileNames.map((name, index) => (
+                <li key={index}>{name}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </motion.div>
   );

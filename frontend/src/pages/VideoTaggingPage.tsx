@@ -39,7 +39,25 @@ const VideoTaggingPage: React.FC = () => {
 
   // State to hold the tag payload temporarily
   const [tagPayload, setTagPayload] = useState<Partial<TagActionResultPayload>>({});
+  const [sessionDate, setSessionDate] = useState<string | null>(null);
 
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        console.log("Fetching session with ID:", id);
+        const response = await axios.get(`http://localhost:8000/practice_sessions/${id}`);
+        console.log("Fetched session data:", response.data);
+        const date = new Date(response.data.session_date);
+        setSessionDate(date.toLocaleDateString());
+      } catch (error) {
+        console.error('Error fetching practice session:', error);
+      }
+    };
+
+    if (id) {
+      fetchSession();
+    }
+  }, [id]);
 
   const handleAddTag = () => {
     setIsActionMenuOpen(true);
@@ -76,6 +94,9 @@ const VideoTaggingPage: React.FC = () => {
 
   return (
     <MainLayout title="Video Tagging">
+      <h1 className="text-2xl font-semibold text-center text-gray-800 dark:text-white mb-4">
+        {sessionDate ? ` ${sessionDate}` : 'Loading...'}
+      </h1>
       <VideoPlayer 
         videoSrc="https://images.pexels.com/photos/3755442/pexels-photo-3755442.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
         onAddTag={handleAddTag}
@@ -94,9 +115,6 @@ const VideoTaggingPage: React.FC = () => {
         onClose={() => setIsPlayerRoleMenuOpen(false)}
         onAssignRole={handleAssignRole}
         onOpenResultMenu={() => console.log('Result menu opened')}
-      />
-
-      <ResultMenu
       />
     </MainLayout>
   );

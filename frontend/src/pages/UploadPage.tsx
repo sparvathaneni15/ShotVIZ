@@ -4,12 +4,7 @@ import UploadZone from '../components/upload/UploadZone';
 import UploadForm from '../components/upload/UploadForm';
 import { motion } from 'framer-motion';
 
-interface FormData {
-  date: string;
-  sessionType: string;
-  tags: string;
-  notes: string;
-}
+
 
 const UploadPage: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
@@ -20,29 +15,48 @@ const UploadPage: React.FC = () => {
     setSelectedFiles(files);
   };
 
-  const handleFormSubmit = async (formData: FormData) => {
+  const handleFormSubmit = async (formValues: { date: string; sessionType: string; tags: string; notes: string }) => {
     if (!selectedFiles || selectedFiles.length === 0) return;
 
     setUploading(true);
 
-    const data = new FormData();
-    data.append('file', selectedFiles[0]);
-    data.append('date', formData.date);
-    data.append('sessionType', formData.sessionType);
-    data.append('tags', formData.tags);
-    data.append('notes', formData.notes);
-
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/upload`, {
+      // Step 1: Upload the video file
+      const videoData = new FormData();
+      videoData.append('file', selectedFiles[0]);
+
+      const videoUploadRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/upload_video`, {
         method: 'POST',
-        body: data,
+        body: videoData,
+      });
+
+      if (!videoUploadRes.ok) {
+        throw new Error('Video upload failed');
+      }
+
+      const videoUploadResult = await videoUploadRes.json();
+      const videoUrl = videoUploadResult.video_url;
+
+
+      const metadata = {
+        uploaded_by: 1, // Hardcoded user ID for now
+        session_date: formValues.date,
+        video_url: videoUrl,
+        notes: formValues.notes,
+      };
+
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/practice_sessions/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(metadata),
       });
 
       if (!response.ok) {
-        throw new Error('Upload failed');
+        throw new Error('Session creation failed');
       }
 
-      // Optional: handle server response if needed
       const result = await response.json();
       console.log('Upload successful:', result);
     } catch (error) {
