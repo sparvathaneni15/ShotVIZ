@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 interface PracticeSession {
   id: number;
   session_date: string;
-  videoUrl: string;
+  video_url: string;
   notes: string;
 }
 
@@ -31,12 +31,7 @@ const PracticeSessionPage: React.FC = () => {
 
   return (
     <MainLayout title="Library" showUploadButton>
-      <DateRangeFilter
-        startDate={startDate}
-        endDate={endDate}
-        onStartDateChange={setStartDate}
-        onEndDateChange={setEndDate}
-      />
+
       
       <motion.div 
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -47,8 +42,8 @@ const PracticeSessionPage: React.FC = () => {
         {sessions.map((session) => (
           <FilmCard 
             id={session.id}
-            date={session.session_date}
-            videoUrl={session.videoUrl}
+            session_date={session.session_date}
+            video_url={session.video_url}
             notes={session.notes}/>
         ))}
       </motion.div>

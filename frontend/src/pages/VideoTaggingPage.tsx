@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
 import VideoPlayer from '../components/tagging/VideoPlayer';
 import TagFlow from '../components/tagging/TagFlow';
@@ -8,6 +8,7 @@ import ActionMenu from '../components/tagging/ActionMenu';
 import PlayerRoleMenu from '../components/tagging/PlayerRoleMenu';
 import ResultMenu from '../components/tagging/ResultMenu';
 import axios from 'axios';
+import { video } from 'framer-motion/client';
 
 interface Tag {
   color: string;
@@ -32,14 +33,19 @@ interface TimelineItem {
 }
 
 const VideoTaggingPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
   const [activeStep, setActiveStep] = useState(1);
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
   const [isPlayerRoleMenuOpen, setIsPlayerRoleMenuOpen] = useState(false);
+  const location = useLocation();
+
+
+  // State for sessionDate
+  const [sessionDate, setSessionDate] = useState<string | undefined>(undefined);
+  const [video_url, setVideoUrl] = useState<string | undefined>(undefined);
 
   // State to hold the tag payload temporarily
   const [tagPayload, setTagPayload] = useState<Partial<TagActionResultPayload>>({});
-  const [sessionDate, setSessionDate] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -48,6 +54,8 @@ const VideoTaggingPage: React.FC = () => {
         const response = await axios.get(`http://localhost:8000/practice_sessions/${id}`);
         console.log("Fetched session data:", response.data);
         const date = new Date(response.data.session_date);
+        const video_url = response.data.video_url;
+        setVideoUrl(video_url);
         setSessionDate(date.toLocaleDateString());
       } catch (error) {
         console.error('Error fetching practice session:', error);
@@ -95,10 +103,10 @@ const VideoTaggingPage: React.FC = () => {
   return (
     <MainLayout title="Video Tagging">
       <h1 className="text-2xl font-semibold text-center text-gray-800 dark:text-white mb-4">
-        {sessionDate ? ` ${sessionDate}` : 'Loading...'}
+        {sessionDate || 'Loading...'}
       </h1>
       <VideoPlayer 
-        videoSrc="https://images.pexels.com/photos/3755442/pexels-photo-3755442.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+        videoSrc={video_url ?? ''} 
         onAddTag={handleAddTag}
       />
 

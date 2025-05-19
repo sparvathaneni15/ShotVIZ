@@ -8,7 +8,7 @@ from ..dependencies import get_db
 
 router = APIRouter(prefix="/practice_sessions", tags=["practice_sessions"])
 
-@router.get("/", response_model=List[schemas.PracticeSessionBase])
+@router.get("/", response_model=List[schemas.PracticeSessionRead])
 def read_sessions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_practice_sessions(db, skip=skip, limit=limit)
 

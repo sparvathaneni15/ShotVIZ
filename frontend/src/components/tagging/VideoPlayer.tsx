@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef} from 'react';
 import { PlayIcon } from '../icons/Icons';
 import { motion } from 'framer-motion';
 
@@ -8,13 +8,45 @@ interface VideoPlayerProps {
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(33); // Mock progress percentage
-  const [currentTime, setCurrentTime] = useState('02:45');
-  const [totalTime, setTotalTime] = useState('08:30');
+  const [progress, setProgress] = useState(0); // in %
+  const [currentTime, setCurrentTime] = useState('00:00');
+  const [totalTime, setTotalTime] = useState('00:00');
 
   const togglePlay = () => {
-    setIsPlaying(!isPlaying);
+    const video = videoRef.current;
+    if (video) {
+      if (isPlaying) {
+        video.pause();
+      } else {
+        video.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    const video = videoRef.current;
+    if (video) {
+      const progressPercent = (video.currentTime / video.duration) * 100;
+      setProgress(progressPercent);
+      setCurrentTime(formatTime(video.currentTime));
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    const video = videoRef.current;
+    if (video) {
+      setTotalTime(formatTime(video.duration));
+    }
+  };
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
   return (
@@ -25,11 +57,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
       transition={{ duration: 0.5 }}
     >
       <div className="relative h-[480px] bg-black rounded-lg mb-4">
-        <img 
+        <video 
           className="w-full h-full object-cover rounded-lg" 
-          src={videoSrc} 
-          alt="Basketball game footage" 
-        />
+          src={videoSrc}
+          onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={handleLoadedMetadata} 
+          />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 p-4">
           <div className="flex items-center space-x-4">
             <button 

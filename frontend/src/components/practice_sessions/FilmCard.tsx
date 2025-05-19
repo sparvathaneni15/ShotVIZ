@@ -4,18 +4,30 @@ import { useNavigate } from 'react-router-dom';
 
 interface FilmCardProps {
   id: number;
-  date: string;
-  videoUrl: string;
+  session_date: string;
+  video_url: string;
   notes: string;
 }
 
 const FilmCard: React.FC<FilmCardProps> = ({
   id,
-  date,
+  session_date,
+  video_url,
   notes
 }) => {
   const navigate = useNavigate();
+  console.log("FilmCard ID:", id);
 
+  const handleTagClick = () => {
+    navigate(`/tagging/${id}`, {
+      state: {
+        id: id,
+        videoUrl: video_url,
+        sessionDate: session_date,
+        notes: notes
+      }
+    });
+  };
 
   return (
     <motion.div 
@@ -29,8 +41,9 @@ const FilmCard: React.FC<FilmCardProps> = ({
       <div className="p-4">
         <div className="flex justify-between items-start mb-3">
           <div>
-            <h3 className="text-lg font-bold text-gray-800 dark:text-white">{date}</h3>
+            <h3 className="text-lg font-bold text-gray-800 dark:text-white">{session_date}</h3>
             <h4 className="text-gray-600 dark:text-gray-400">{notes}</h4>
+            <h4 className="text-gray-600 dark:text-gray-400">{video_url}</h4>
           </div>
         </div>
 
@@ -38,7 +51,7 @@ const FilmCard: React.FC<FilmCardProps> = ({
           <div className="flex -space-x-2">
           
           <motion.button
-            onClick={() => navigate(`/tagging/${id}`)}
+            onClick={handleTagClick}
             className="text-[#FFB81C] hover:text-[#FFB81C]/80 transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}

@@ -24,11 +24,10 @@ CREATE TABLE players (
 CREATE TABLE practice_sessions (
   id             SERIAL PRIMARY KEY,
   uploaded_by    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  session_date   DATE NOT NULL,
+  session_date   DATE UNIQUE NOT NULL,
   video_url      TEXT NOT NULL,       -- S3/streaming URL
   notes          TEXT,
-  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (uploaded_by, session_date)
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE actions (

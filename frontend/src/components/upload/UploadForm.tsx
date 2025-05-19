@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface UploadFormData {
+  uploadedBy: number;
   date: string;
-  sessionType: string;
-  tags: string;
+  videoUrl: string;
   notes: string;
 }
 
@@ -14,6 +14,7 @@ interface UploadFormProps {
   showProgress?: boolean;
   progressPercentage?: number;
   fileName?: string;
+  initialVideoUrl?: string;
 }
 
 const UploadForm: React.FC<UploadFormProps> = ({
@@ -21,18 +22,24 @@ const UploadForm: React.FC<UploadFormProps> = ({
   onCancel,
   showProgress = false,
   progressPercentage = 0,
-  fileName = ''
+  fileName = '',
+  initialVideoUrl = ''
 }) => {
   const [formData, setFormData] = useState<UploadFormData>({
     date: new Date().toISOString().split('T')[0],
-    sessionType: 'Full Practice',
-    tags: '',
+    uploadedBy: 1,
+    videoUrl: initialVideoUrl,
     notes: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => {
+      if (name === 'date') {
+        return { ...prev, [name]: new Date(value).toISOString().split('T')[0] };
+      }
+      return { ...prev, [name]: value };
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {

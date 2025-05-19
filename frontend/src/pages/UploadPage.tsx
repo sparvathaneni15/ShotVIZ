@@ -5,7 +5,6 @@ import UploadForm from '../components/upload/UploadForm';
 import { motion } from 'framer-motion';
 
 
-
 const UploadPage: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -15,7 +14,7 @@ const UploadPage: React.FC = () => {
     setSelectedFiles(files);
   };
 
-  const handleFormSubmit = async (formValues: { date: string; sessionType: string; tags: string; notes: string }) => {
+  const handleFormSubmit = async (formValues: { uploadedBy: number; date: string; videoUrl: string; notes: string}) => {
     if (!selectedFiles || selectedFiles.length === 0) return;
 
     setUploading(true);
@@ -38,12 +37,12 @@ const UploadPage: React.FC = () => {
       const videoUrl = videoUploadResult.video_url;
 
 
-      const metadata = {
-        uploaded_by: 1, // Hardcoded user ID for now
-        session_date: formValues.date,
-        video_url: videoUrl,
-        notes: formValues.notes,
-      };
+    const metadata = {
+      uploaded_by: 1,
+      session_date: new Date(formValues.date),
+      video_url: videoUrl,
+      notes: formValues.notes,
+    };
 
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/practice_sessions/`, {
         method: 'POST',
