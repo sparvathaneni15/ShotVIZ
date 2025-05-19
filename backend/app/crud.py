@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session # type: ignore
 import app.models as models, app.schemas as schemas
 import datetime
 
@@ -61,6 +61,13 @@ def create_practice_session(db: Session, session: schemas.PracticeSessionCreate)
     db.refresh(db_session)
     return db_session
 
+def delete_practice_session(db: Session, session_id: int):
+    db_session = db.query(models.PracticeSession).filter(models.PracticeSession.id == session_id).first()
+    if db_session:
+        db.delete(db_session)
+        db.commit()
+        return db_session
+    return None
 
 # --- Role CRUD ---
 def get_role_type(db: Session, role_id: int):

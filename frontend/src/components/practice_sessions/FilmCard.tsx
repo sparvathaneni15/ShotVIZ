@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaTrashAlt } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,7 +17,6 @@ const FilmCard: React.FC<FilmCardProps> = ({
   notes
 }) => {
   const navigate = useNavigate();
-  console.log("FilmCard ID:", id);
 
   const handleTagClick = () => {
     navigate(`/tagging/${id}`, {
@@ -27,6 +27,37 @@ const FilmCard: React.FC<FilmCardProps> = ({
         notes: notes
       }
     });
+  };
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm("Are you sure you want to delete this session?");
+    if (!confirmed) return;
+
+    try {
+      // Step 1: Delete the video file from S3
+      const s3Response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/delete_videos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ video_url: video_url }),
+      });
+
+      if (!s3Response.ok) {
+        throw new Error('Failed to delete video from S3.');
+      }
+
+      // Step 2: Delete the session from the database
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/practice_sessions/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete the session.');
+      }
+
+      navigate(0); // Refresh the page
+    } catch (error) {
+      console.error("Deletion error:", error);
+    }
   };
 
   return (
@@ -48,7 +79,7 @@ const FilmCard: React.FC<FilmCardProps> = ({
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex -space-x-2">
+          <div className="flex space-x-4">
           
           <motion.button
             onClick={handleTagClick}
@@ -57,6 +88,14 @@ const FilmCard: React.FC<FilmCardProps> = ({
             whileTap={{ scale: 0.9 }}
           >
             Add Tags
+          </motion.button>
+          <motion.button
+            onClick={handleDelete}
+            className="text-red-500 hover:text-red-400 ml-4"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaTrashAlt />
           </motion.button>
           </div>
         </div>

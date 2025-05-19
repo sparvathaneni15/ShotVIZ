@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, HTTPException # type: ignore
+from sqlalchemy.orm import Session # type: ignore
 from typing import List
 
 from .. import crud, schemas
@@ -19,3 +19,10 @@ def create_session(session: schemas.PracticeSessionCreate, db: Session = Depends
 @router.get("/{session_id}", response_model=schemas.PracticeSessionRead)
 def read_session(session_id: int, db: Session = Depends(get_db)):
     return crud.get_practice_session(db, session_id=session_id)
+
+@router.delete("/{session_id}", response_model=schemas.PracticeSessionRead)
+def delete_session(session_id: int, db: Session = Depends(get_db)):
+    db_session = crud.get_practice_session(db, session_id=session_id)
+    if db_session is None:
+        raise HTTPException(status_code=404, detail="Session not found")
+    return crud.delete_practice_session(db, session_id=session_id)

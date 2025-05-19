@@ -22,7 +22,8 @@ from app.routers import (users,
                          results,
                          roles,
                          stats,
-                         upload_video)
+                         upload_video,
+                         delete_video)
 
 # --- Create all tables (only for dev; in prod use migrations) ---
 Base.metadata.create_all(bind=engine)
@@ -58,6 +59,7 @@ app.include_router(roles.router)
 app.include_router(tag_action_result.router)
 app.include_router(upload_video.router)
 app.include_router(stats.router)
+app.include_router(delete_video.router)
 
 # --- A simple health-check or root endpoint ---
 @app.get("/", summary="Service health check")

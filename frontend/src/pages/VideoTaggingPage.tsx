@@ -42,8 +42,7 @@ const VideoTaggingPage: React.FC = () => {
 
   // State for sessionDate
   const [sessionDate, setSessionDate] = useState<string | undefined>(undefined);
-  const [video_url, setVideoUrl] = useState<string | undefined>(undefined);
-
+  const [video_url, setVideoUrl] = useState<string>('');
   // State to hold the tag payload temporarily
   const [tagPayload, setTagPayload] = useState<Partial<TagActionResultPayload>>({});
 
@@ -55,6 +54,7 @@ const VideoTaggingPage: React.FC = () => {
         console.log("Fetched session data:", response.data);
         const date = new Date(response.data.session_date);
         const video_url = response.data.video_url;
+        console.log("Video URL:", video_url);
         setVideoUrl(video_url);
         setSessionDate(date.toLocaleDateString());
       } catch (error) {
@@ -106,7 +106,7 @@ const VideoTaggingPage: React.FC = () => {
         {sessionDate || 'Loading...'}
       </h1>
       <VideoPlayer 
-        videoSrc={video_url ?? ''} 
+        videoSrc={video_url} 
         onAddTag={handleAddTag}
       />
 
