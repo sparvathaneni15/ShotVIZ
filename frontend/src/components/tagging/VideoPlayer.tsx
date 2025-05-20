@@ -1,6 +1,7 @@
-import React, { useState, useRef} from 'react';
+import React, { useState, useRef, useEffect} from 'react';
 import { PlayIcon } from '../icons/Icons';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 
 interface VideoPlayerProps {
   videoSrc: string;
@@ -14,6 +15,37 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
   const [progress, setProgress] = useState(0); // in %
   const [currentTime, setCurrentTime] = useState('00:00');
   const [totalTime, setTotalTime] = useState('00:00');
+
+  const [players, setPlayers] = useState<{ id: number, first_name: string }[]>([]);
+  const [activePlayerId, setActivePlayerId] = useState<number | null>(null);
+  const [stats, setStats] = useState<{ [key: number]: { points?: number; assists?: number; rebounds?: number } }>({});
+  
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/players/all`);
+        const data = await response.data;
+        setPlayers(data);
+        if (data.length > 0) {
+          setActivePlayerId(data[0].id);
+        }
+      } catch (error) {
+        console.error("Failed to fetch players:", error);
+      }
+    };
+
+    fetchPlayers();
+  }, []);
+
+  const handleInputChange = (playerId: number, field: string, value: number) => {
+    setStats(prev => ({
+      ...prev,
+      [playerId]: {
+        ...prev[playerId],
+        [field]: value,
+      }
+    }));
+  };
 
   const togglePlay = async () => {
     const video = videoRef.current;
@@ -150,12 +182,57 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
       </div>
       <div className="w-full lg:w-[300px] bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
         <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Counting Stats</h3>
+        <div className="flex overflow-x-auto space-x-2 mb-4">
+          {players.map(player => (
+            <button
+              key={player.id}
+              onClick={() => setActivePlayerId(player.id)}
+              className={`px-3 py-1 rounded-full text-sm ${
+                player.id === activePlayerId ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
+              }`}
+            >
+              {player.first_name}
+            </button>
+          ))}
+        </div>
         <form className="space-y-3">
-          <input type="text" placeholder="Player ID" className="w-full px-3 py-2 border rounded" />
-          <input type="number" placeholder="Points" className="w-full px-3 py-2 border rounded" />
-          <input type="number" placeholder="Assists" className="w-full px-3 py-2 border rounded" />
-          <input type="number" placeholder="Rebounds" className="w-full px-3 py-2 border rounded" />
-          <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+          <input
+            type="number"
+            placeholder="Points"
+            className="w-full px-3 py-2 border rounded"
+            value={activePlayerId !== null ? (stats[activePlayerId]?.points ?? '') : ''}
+            onChange={e => {
+              if (activePlayerId !== null) {
+                handleInputChange(activePlayerId, 'points', parseInt(e.target.value));
+              }
+            }}
+            disabled={activePlayerId === null}
+          />
+          <input
+            type="number"
+            placeholder="Assists"
+            className="w-full px-3 py-2 border rounded"
+            value={activePlayerId !== null ? (stats[activePlayerId]?.assists ?? '') : ''}
+            onChange={e => {
+              if (activePlayerId !== null) {
+                handleInputChange(activePlayerId, 'assists', parseInt(e.target.value));
+              }
+            }}
+            disabled={activePlayerId === null}
+          />
+          <input
+            type="number"
+            placeholder="Rebounds"
+            className="w-full px-3 py-2 border rounded"
+            value={activePlayerId !== null ? (stats[activePlayerId]?.rebounds ?? '') : ''}
+            onChange={e => {
+              if (activePlayerId !== null) {
+                handleInputChange(activePlayerId, 'rebounds', parseInt(e.target.value));
+              }
+            }}
+            disabled={activePlayerId === null}
+          />
+          <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700" disabled={activePlayerId === null}>
             Submit
           </button>
         </form>
