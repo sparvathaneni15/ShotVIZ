@@ -22,7 +22,7 @@ const UploadPage: React.FC = () => {
     try {
       // Step 1: Upload the video file
       const videoData = new FormData();
-      videoData.append('file', selectedFiles[0]);
+      videoData.append('raw_video', selectedFiles[0]);
 
       const videoUploadRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/upload_video`, {
         method: 'POST',
@@ -44,6 +44,8 @@ const UploadPage: React.FC = () => {
       notes: formValues.notes,
     };
 
+      console.log('Uploading practice session metadata:', metadata);
+
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/practice_sessions/`, {
         method: 'POST',
         headers: {
@@ -58,6 +60,7 @@ const UploadPage: React.FC = () => {
 
       const result = await response.json();
       console.log('Upload successful:', result);
+      console.log('Practice session created:', result);
     } catch (error) {
       console.error('Error uploading file:', error);
     } finally {

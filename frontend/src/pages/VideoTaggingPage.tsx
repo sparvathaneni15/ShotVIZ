@@ -54,7 +54,6 @@ const VideoTaggingPage: React.FC = () => {
         console.log("Fetched session data:", response.data);
         const date = new Date(response.data.session_date);
         const video_url = response.data.video_url;
-        console.log("Video URL:", video_url);
         setVideoUrl(video_url);
         setSessionDate(date.toLocaleDateString());
       } catch (error) {
@@ -102,9 +101,6 @@ const VideoTaggingPage: React.FC = () => {
 
   return (
     <MainLayout title="Video Tagging">
-      <h1 className="text-2xl font-semibold text-center text-gray-800 dark:text-white mb-4">
-        {sessionDate || 'Loading...'}
-      </h1>
       <VideoPlayer 
         videoSrc={video_url} 
         onAddTag={handleAddTag}

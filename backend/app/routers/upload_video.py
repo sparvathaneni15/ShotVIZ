@@ -59,3 +59,4 @@ async def transcode_and_upload_video(raw_video: UploadFile = File(...)):
     # Cleanup
     os.remove(input_path)
     os.remove(output_path)
+    return {"video_url": s3_url}

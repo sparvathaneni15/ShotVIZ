@@ -32,7 +32,7 @@ const PracticeSessionPage: React.FC = () => {
   return (
     <MainLayout title="Library" showUploadButton>
 
-      
+
       <motion.div 
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         initial={{ opacity: 0 }}
@@ -41,6 +41,7 @@ const PracticeSessionPage: React.FC = () => {
       >
         {sessions.map((session) => (
           <FilmCard 
+            key={session.id}
             id={session.id}
             session_date={session.session_date}
             video_url={session.video_url}
