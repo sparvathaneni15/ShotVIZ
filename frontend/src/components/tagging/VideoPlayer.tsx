@@ -181,7 +181,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
         </motion.section>
       </div>
       <div className="w-full lg:w-[300px] bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Counting Stats</h3>
+        <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Stats</h3>
         <div className="flex overflow-x-auto space-x-2 mb-4">
           {players.map(player => (
             <button
@@ -195,7 +195,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
             </button>
           ))}
         </div>
-        <form className="space-y-3">
+        {activePlayerId !== null && (
+          <h4 className="text-xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">
+            {players.find(p => p.id === activePlayerId)?.first_name}
+          </h4>
+        )}
+        <form key={activePlayerId} className="space-y-3">
           <input
             type="number"
             placeholder="Points"
