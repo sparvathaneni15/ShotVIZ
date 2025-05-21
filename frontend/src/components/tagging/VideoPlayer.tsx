@@ -18,7 +18,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
 
   const [players, setPlayers] = useState<{ id: number, first_name: string }[]>([]);
   const [activePlayerId, setActivePlayerId] = useState<number | null>(null);
-  const [stats, setStats] = useState<{ [key: number]: { points?: number; assists?: number; rebounds?: number } }>({});
+  const [stats, setStats] = useState<{ [key: number]: { points?: number; assists?: number; rebounds?: number; steals?: number; turnovers?: number; blocks?: number; fouls?: number } }>({});
   
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -233,6 +233,57 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
             onChange={e => {
               if (activePlayerId !== null) {
                 handleInputChange(activePlayerId, 'rebounds', parseInt(e.target.value));
+              }
+            }}
+            disabled={activePlayerId === null}
+          />
+          <input
+            type="number"
+            placeholder="Steals"
+            className="w-full px-3 py-2 border rounded"
+            value={activePlayerId !== null ? (stats[activePlayerId]?.steals ?? '') : ''}
+            onChange={e => {
+              if (activePlayerId !== null) {
+                handleInputChange(activePlayerId, 'steals', parseInt(e.target.value));
+              }
+            }}
+            disabled={activePlayerId === null}
+          />
+
+          <input
+            type="number"
+            placeholder="Turnovers"
+            className="w-full px-3 py-2 border rounded"
+            value={activePlayerId !== null ? (stats[activePlayerId]?.turnovers ?? '') : ''}
+            onChange={e => {
+              if (activePlayerId !== null) {
+                handleInputChange(activePlayerId, 'turnovers', parseInt(e.target.value));
+              }
+            }}
+            disabled={activePlayerId === null}
+          />
+
+          <input
+            type="number"
+            placeholder="Blocks"
+            className="w-full px-3 py-2 border rounded"
+            value={activePlayerId !== null ? (stats[activePlayerId]?.blocks ?? '') : ''}
+            onChange={e => {
+              if (activePlayerId !== null) {
+                handleInputChange(activePlayerId, 'blocks', parseInt(e.target.value));
+              }
+            }}
+            disabled={activePlayerId === null}
+          />
+
+          <input
+            type="number"
+            placeholder="Fouls"
+            className="w-full px-3 py-2 border rounded"
+            value={activePlayerId !== null ? (stats[activePlayerId]?.fouls ?? '') : ''}
+            onChange={e => {
+              if (activePlayerId !== null) {
+                handleInputChange(activePlayerId, 'fouls', parseInt(e.target.value));
               }
             }}
             disabled={activePlayerId === null}
