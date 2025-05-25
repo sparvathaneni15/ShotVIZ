@@ -5,10 +5,9 @@ import axios from 'axios';
 
 interface VideoPlayerProps {
   videoSrc: string;
-  onAddTag: () => void;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({videoSrc}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);

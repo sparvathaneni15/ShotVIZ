@@ -140,8 +140,8 @@ class StatBase(BaseModel):
     assists: int
     rebounds: int
     steals: int
-    turnovers: int
     blocks: int
+    turnovers: int
     fouls: int
 
 class StatCreate(StatBase):

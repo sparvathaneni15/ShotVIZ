@@ -2,35 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
 import VideoPlayer from '../components/tagging/VideoPlayer';
+import StatsTable from '../components/tagging/StatsTable';
+import ActionTagForm from '../components/tagging/ActionTagForm';
 import axios from 'axios';
 
-interface Tag {
-  color: string;
-  label: string;
-}
-
-// Payload interface for submitting tag action results
-interface TagActionResultPayload {
-  practice_sessions_id: number;
-  start_time: number;
-  end_time: number;
-  action_id: number;
-  result_id: number;
-  shot_id?: number;
-  occurred_at: string;
-}
-
-interface TimelineItem {
-  id: string;
-  timestamp: string;
-  tags: Tag[];
-}
 
 const VideoTaggingPage: React.FC = () => {
   const { id } = useParams();
-  const [activeStep, setActiveStep] = useState(1);
-  const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
-  const [isPlayerRoleMenuOpen, setIsPlayerRoleMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'stats' | 'tags'>('stats');
   const location = useLocation();
 
@@ -38,8 +16,6 @@ const VideoTaggingPage: React.FC = () => {
   // State for sessionDate
   const [sessionDate, setSessionDate] = useState<string | undefined>(undefined);
   const [video_url, setVideoUrl] = useState<string>('');
-  // State to hold the tag payload temporarily
-  const [tagPayload, setTagPayload] = useState<Partial<TagActionResultPayload>>({});
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -61,45 +37,35 @@ const VideoTaggingPage: React.FC = () => {
     }
   }, [id]);
 
-  const handleAddTag = () => {
-    setIsActionMenuOpen(true);
-  };
-
-  const handleSelectAction = (action: { id: string; name: string }) => {
-    setIsActionMenuOpen(false);
-    setIsPlayerRoleMenuOpen(true);
-  };
-    // Function to submit the tag payload to the backend
-  const submitTag = async () => {
-    try {
-      const response = await axios.post('http://localhost:8000/tag_action_result/', tagPayload);
-      console.log('Tag submitted successfully:', response.data);
-    } catch (error) {
-      console.error('Error submitting tag:', error);
-    }
-  };
-
-
-  const handleAssignRole = (playerId: string, roleId: string) => {
-    // In a real app, you would update the state with the new role assignment
-    console.log(`Assigned role ${roleId} to player ${playerId}`);
-    // Placeholder: Trigger tag submission after assigning roles
-    submitTag();
-  };
-
-
-
-  const handleEditTag = (id: string) => {
-    // In a real app, this would open the tag editing modal
-    console.log(`Editing tag ${id}`);
-  };
-
   return (
     <MainLayout title="Video Tagging">
       <VideoPlayer 
         videoSrc={video_url} 
-        onAddTag={handleAddTag}
       />
+
+      <div className="flex w-full">
+        <button
+          onClick={() => setActiveTab('stats')}
+          className={`w-1/2 px-4 py-2 text-center ${
+            activeTab === 'stats' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black'
+          }`}
+        >
+          Stats Table
+        </button>
+        <button
+          onClick={() => setActiveTab('tags')}
+          className={`w-1/2 px-4 py-2 text-center ${
+            activeTab === 'tags' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-black'
+          }`}
+        >
+          Action Tag Form
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      <div className="flex-1 overflow-y-auto p-4">
+        {activeTab === 'stats' ? <StatsTable practiceSessionId={id ? Number(id) : 0} /> : <ActionTagForm />}
+      </div>
     </MainLayout>
   );
 };
