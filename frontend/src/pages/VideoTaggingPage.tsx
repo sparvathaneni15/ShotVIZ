@@ -2,13 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
 import VideoPlayer from '../components/tagging/VideoPlayer';
-import TagFlow from '../components/tagging/TagFlow';
-import TagTimeline from '../components/tagging/TagTimeline';
-import ActionMenu from '../components/tagging/ActionMenu';
-import PlayerRoleMenu from '../components/tagging/PlayerRoleMenu';
-import ResultMenu from '../components/tagging/ResultMenu';
 import axios from 'axios';
-import { video } from 'framer-motion/client';
 
 interface Tag {
   color: string;
@@ -37,6 +31,7 @@ const VideoTaggingPage: React.FC = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
   const [isPlayerRoleMenuOpen, setIsPlayerRoleMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'stats' | 'tags'>('stats');
   const location = useLocation();
 
 
@@ -104,21 +99,6 @@ const VideoTaggingPage: React.FC = () => {
       <VideoPlayer 
         videoSrc={video_url} 
         onAddTag={handleAddTag}
-      />
-
-      <TagFlow activeStep={activeStep} />
-
-      <ActionMenu
-        isOpen={isActionMenuOpen}
-        onClose={() => setIsActionMenuOpen(false)}
-        onSelectAction={handleSelectAction}
-      />
-
-      <PlayerRoleMenu
-        isOpen={isPlayerRoleMenuOpen}
-        onClose={() => setIsPlayerRoleMenuOpen(false)}
-        onAssignRole={handleAssignRole}
-        onOpenResultMenu={() => console.log('Result menu opened')}
       />
     </MainLayout>
   );

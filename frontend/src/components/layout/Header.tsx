@@ -14,7 +14,7 @@ const Header: React.FC<HeaderProps> = ({ title, showUploadButton = false }) => {
   const navigate = useNavigate();
 
   return (
-    <header className="flex justify-between items-center mb-8">
+    <header className="flex justify-between items-center mb-4">
       <motion.h1 
         className="text-3xl font-bold text-gray-900 dark:text-white"
         initial={{ opacity: 0, y: -10 }}

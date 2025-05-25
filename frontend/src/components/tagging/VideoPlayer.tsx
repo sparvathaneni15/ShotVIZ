@@ -16,37 +16,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
   const [currentTime, setCurrentTime] = useState('00:00');
   const [totalTime, setTotalTime] = useState('00:00');
 
-  const [players, setPlayers] = useState<{ id: number, first_name: string }[]>([]);
-  const [activePlayerId, setActivePlayerId] = useState<number | null>(null);
-  const [stats, setStats] = useState<{ [key: number]: { points?: number; assists?: number; rebounds?: number; steals?: number; turnovers?: number; blocks?: number; fouls?: number } }>({});
-  
-  useEffect(() => {
-    const fetchPlayers = async () => {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/players/all`);
-        const data = await response.data;
-        setPlayers(data);
-        if (data.length > 0) {
-          setActivePlayerId(data[0].id);
-        }
-      } catch (error) {
-        console.error("Failed to fetch players:", error);
-      }
-    };
-
-    fetchPlayers();
-  }, []);
-
-  const handleInputChange = (playerId: number, field: string, value: number) => {
-    setStats(prev => ({
-      ...prev,
-      [playerId]: {
-        ...prev[playerId],
-        [field]: value,
-      }
-    }));
-  };
-
   const togglePlay = async () => {
     const video = videoRef.current;
     if (video) {
@@ -104,7 +73,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="relative aspect-video bg-black rounded-lg mb-4">
+          <div className="relative aspect-video bg-black rounded-lg mb-1">
             <video 
               ref={videoRef}
               className="w-full h-full object-cover rounded-lg" 
@@ -140,158 +109,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoSrc, onAddTag }) => {
               </div>
             </div>
           </div>
-
-          {/* Frame Controls */}
-          <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 rounded-lg p-3">
-            <div className="flex space-x-3">
-              <motion.button 
-                className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                aria-label="Previous frame"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-                </svg>
-              </motion.button>
-              <motion.button 
-                className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                aria-label="Next frame"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                  <path fillRule="evenodd" d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                </svg>
-              </motion.button>
-            </div>
-            <motion.button 
-              onClick={onAddTag}
-              className="bg-[#2D3092] hover:bg-[#2D3092]/90 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-              </svg>
-              <span>Add Tag</span>
-            </motion.button>
-          </div>
         </motion.section>
-      </div>
-      <div className="w-full lg:w-[300px] bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
-        <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Stats</h3>
-        <div className="flex overflow-x-auto space-x-2 mb-4">
-          {players.map(player => (
-            <button
-              key={player.id}
-              onClick={() => setActivePlayerId(player.id)}
-              className={`px-3 py-1 rounded-full text-sm ${
-                player.id === activePlayerId ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              {player.first_name}
-            </button>
-          ))}
-        </div>
-        {activePlayerId !== null && (
-          <h4 className="text-xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">
-            {players.find(p => p.id === activePlayerId)?.first_name}
-          </h4>
-        )}
-        <form key={activePlayerId} className="space-y-3">
-          <input
-            type="number"
-            placeholder="Points"
-            className="w-full px-3 py-2 border rounded"
-            value={activePlayerId !== null ? (stats[activePlayerId]?.points ?? '') : ''}
-            onChange={e => {
-              if (activePlayerId !== null) {
-                handleInputChange(activePlayerId, 'points', parseInt(e.target.value));
-              }
-            }}
-            disabled={activePlayerId === null}
-          />
-          <input
-            type="number"
-            placeholder="Assists"
-            className="w-full px-3 py-2 border rounded"
-            value={activePlayerId !== null ? (stats[activePlayerId]?.assists ?? '') : ''}
-            onChange={e => {
-              if (activePlayerId !== null) {
-                handleInputChange(activePlayerId, 'assists', parseInt(e.target.value));
-              }
-            }}
-            disabled={activePlayerId === null}
-          />
-          <input
-            type="number"
-            placeholder="Rebounds"
-            className="w-full px-3 py-2 border rounded"
-            value={activePlayerId !== null ? (stats[activePlayerId]?.rebounds ?? '') : ''}
-            onChange={e => {
-              if (activePlayerId !== null) {
-                handleInputChange(activePlayerId, 'rebounds', parseInt(e.target.value));
-              }
-            }}
-            disabled={activePlayerId === null}
-          />
-          <input
-            type="number"
-            placeholder="Steals"
-            className="w-full px-3 py-2 border rounded"
-            value={activePlayerId !== null ? (stats[activePlayerId]?.steals ?? '') : ''}
-            onChange={e => {
-              if (activePlayerId !== null) {
-                handleInputChange(activePlayerId, 'steals', parseInt(e.target.value));
-              }
-            }}
-            disabled={activePlayerId === null}
-          />
-
-          <input
-            type="number"
-            placeholder="Turnovers"
-            className="w-full px-3 py-2 border rounded"
-            value={activePlayerId !== null ? (stats[activePlayerId]?.turnovers ?? '') : ''}
-            onChange={e => {
-              if (activePlayerId !== null) {
-                handleInputChange(activePlayerId, 'turnovers', parseInt(e.target.value));
-              }
-            }}
-            disabled={activePlayerId === null}
-          />
-
-          <input
-            type="number"
-            placeholder="Blocks"
-            className="w-full px-3 py-2 border rounded"
-            value={activePlayerId !== null ? (stats[activePlayerId]?.blocks ?? '') : ''}
-            onChange={e => {
-              if (activePlayerId !== null) {
-                handleInputChange(activePlayerId, 'blocks', parseInt(e.target.value));
-              }
-            }}
-            disabled={activePlayerId === null}
-          />
-
-          <input
-            type="number"
-            placeholder="Fouls"
-            className="w-full px-3 py-2 border rounded"
-            value={activePlayerId !== null ? (stats[activePlayerId]?.fouls ?? '') : ''}
-            onChange={e => {
-              if (activePlayerId !== null) {
-                handleInputChange(activePlayerId, 'fouls', parseInt(e.target.value));
-              }
-            }}
-            disabled={activePlayerId === null}
-          />
-          <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700" disabled={activePlayerId === null}>
-            Submit
-          </button>
-        </form>
       </div>
     </div>
   );

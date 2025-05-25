@@ -11,7 +11,7 @@ router = APIRouter()
 class DeleteVideoRequest(BaseModel):
     video_url: str
 
-@router.post("/delete_videos")
+@router.post("/delete_video")
 def delete_video(data: DeleteVideoRequest):
     s3 = boto3.client("s3")
     bucket_name = settings.s3_bucket_name
