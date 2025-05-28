@@ -11,7 +11,7 @@ router = APIRouter(prefix="/players", tags=["players"])
 def create_player(player: schemas.PlayerCreate, db: Session = Depends(get_db)):
     return crud.create_player(db, player)
 
-@router.get("/all", response_model=List[schemas.PlayerBase])
+@router.get("/", response_model=List[schemas.PlayerRead])
 def read_players(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_players(db, skip=skip, limit=limit)
 

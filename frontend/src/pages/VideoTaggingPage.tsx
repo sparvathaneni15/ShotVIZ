@@ -64,7 +64,7 @@ const VideoTaggingPage: React.FC = () => {
 
       {/* Tab Content */}
       <div className="flex-1 overflow-y-auto p-4">
-        {activeTab === 'stats' ? <StatsTable practiceSessionId={id ? Number(id) : 0} /> : <ActionTagForm />}
+        {activeTab === 'stats' && id ? <StatsTable practiceSessionId={Number(id)} /> : <ActionTagForm />}
       </div>
     </MainLayout>
   );

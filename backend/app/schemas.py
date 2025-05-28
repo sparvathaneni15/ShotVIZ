@@ -50,7 +50,6 @@ class PlayerCreate(PlayerBase):
 
 class PlayerRead(PlayerBase):
     id: int
-    created_at: datetime
 
     class Config:
         orm_mode = True

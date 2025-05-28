@@ -1,20 +1,34 @@
 import React, { useState, useEffect } from 'react';
 
+interface PlayerStats {
+  id: number;
+  name: string;
+  jersey_no: number;
+  points: number;
+  assists: number;
+  rebounds: number;
+  steals: number;
+  blocks: number;
+  turnovers: number;
+  fouls: number;
+}
+
 interface StatsTableProps {
   practiceSessionId: number;
 }
 
 const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
-  const [players, setPlayers] = useState<{ id: number; name: string; points: number; assists: number; rebounds: number; steals: number; blocks: number; turnovers: number; fouls: number; }[]>([]);
+  const [players, setPlayers] = useState<PlayerStats[]>([]);
 
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/players/all`);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/players/`);
         const data = await response.json();
         const initializedPlayers = data.map((player: { id: number; first_name: string; last_name: string; jersey_no: number }) => ({
           id: player.id,
-          name: `${player.first_name} ${player.last_name} #${player.jersey_no}`,
+          name: `${player.first_name} ${player.last_name}`,
+          jersey_no: player.jersey_no,
           points: 0,
           assists: 0,
           rebounds: 0,
@@ -31,16 +45,19 @@ const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
     fetchPlayers();
   }, []);
 
-  const handleInputChange = async (index: number, field: string, value: number) => {
+  const handleInputChange = async (index: number, field: keyof Omit<PlayerStats, 'id' | 'name' | 'jersey_no'>, value: number) => {
+    const sanitized = Math.max(0, value);
     const updated = [...players];
-    (updated[index] as any)[field] = value;
+    updated[index] = { ...updated[index], [field]: sanitized };
     setPlayers(updated);
 
     const player = updated[index];
     try {
-      await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${player.id}`, {
+        method: 'PUT',
+        headers: { 
+            'Content-Type': 'application/json' 
+        },
         body: JSON.stringify({
           practice_session_id: practiceSessionId,
           player_id: player.id,
@@ -50,7 +67,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
           steals: player.steals,
           blocks: player.blocks,
           turnovers: player.turnovers,
-          fouls: player.fouls
+          fouls: player.fouls,
         }),
       });
     } catch (err) {
@@ -76,13 +93,14 @@ const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
         <tbody>
           {players.map((p, idx) => (
             <tr key={idx} className="bg-gray-900 text-center hover:bg-gray-700 transition-all">
-              <td className="p-3 rounded-l-lg">{p.name}</td>
+              <td className="p-3 rounded-l-lg">{p.name} #{p.jersey_no}</td>
               {['points', 'assists', 'rebounds', 'steals', 'blocks', 'turnovers', 'fouls'].map((field) => (
                 <td key={field} className={`p-3`}>
                   <input
                     type="number"
-                    value={(p as any)[field]}
-                    onChange={(e) => handleInputChange(idx, field, parseInt(e.target.value) || 0)}
+                    min={0}
+                    value={p[field as keyof Omit<PlayerStats, 'id' | 'name' | 'jersey_no'>]}
+                    onChange={(e) => handleInputChange(idx, field as keyof Omit<PlayerStats, 'id' | 'name' | 'jersey_no'>, parseInt(e.target.value) || 0)}
                     className="w-16 bg-gray-700 text-white rounded px-2 py-1 text-center"
                   />
                 </td>

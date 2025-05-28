@@ -112,6 +112,6 @@ class Stat(Base):
     assists = Column(Integer, default=0)
     rebounds = Column(Integer, default=0)
     steals = Column(Integer, default=0)
-    turnovers = Column(Integer, default=0)
     blocks = Column(Integer, default=0)
+    turnovers = Column(Integer, default=0)
     fouls = Column(Integer, default=0)
