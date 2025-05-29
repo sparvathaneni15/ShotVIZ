@@ -21,11 +21,14 @@ const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
   const [players, setPlayers] = useState<PlayerStats[]>([]);
 
   useEffect(() => {
-    const fetchPlayers = async () => {
+    const fetchPlayerStats = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/players/`);
-        const data = await response.json();
-        const initializedPlayers = data.map((player: { id: number; first_name: string; last_name: string; jersey_no: number }) => ({
+        // 1) Fetch all players
+        const playersRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/players/`);
+        const playersData: Array<{ id: number; first_name: string; last_name: string; jersey_no: number }> = await playersRes.json();
+
+        // 2) Initialize each player with default zeros
+        const initialStats: PlayerStats[] = playersData.map(player => ({
           id: player.id,
           name: `${player.first_name} ${player.last_name}`,
           jersey_no: player.jersey_no,
@@ -37,12 +40,34 @@ const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
           turnovers: 0,
           fouls: 0,
         }));
-        setPlayers(initializedPlayers);
+
+        // 3) For each player, fetch their stats if they exist
+        const withStats = await Promise.all(initialStats.map(async p => {
+          try {
+            const statRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${p.id}`);
+            if (!statRes.ok) return p; // no stats recorded
+            const statData: { id: number; points: number; assists: number; rebounds: number; steals: number; blocks: number; turnovers: number; fouls: number } = await statRes.json();
+            return {
+              ...p,
+              stat_id: statData.id,
+              points: statData.points,
+              assists: statData.assists,
+              rebounds: statData.rebounds,
+              steals: statData.steals,
+              blocks: statData.blocks,
+              turnovers: statData.turnovers,
+              fouls: statData.fouls,
+            };
+          } catch {
+            return p;
+          }
+        }));
+        setPlayers(withStats);
       } catch (error) {
         console.error("Failed to fetch players", error);
       }
     };
-    fetchPlayers();
+    fetchPlayerStats();
   }, []);
 
   const handleInputChange = async (index: number, field: keyof Omit<PlayerStats, 'id' | 'name' | 'jersey_no'>, value: number) => {

@@ -73,3 +73,17 @@ def update_stat_by_session_and_player(
     db.commit()
     db.refresh(stat)
     return stat
+
+@router.get("/stats/{practice_session_id}/{player_id}", response_model=List[schemas.StatBase])
+def get_stats_by_practice_session(
+    practice_session_id: int,
+    player_id: int,
+    db: Session = Depends(get_db)
+):
+    stats = db.query(models.Stat).filter(
+        models.Stat.practice_session_id == practice_session_id,
+        models.Stat.player_id == player_id
+    ).all()
+    if not stats:
+        raise HTTPException(status_code=404, detail="No stats found for this practice session")
+    return stats
