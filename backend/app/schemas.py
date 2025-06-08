@@ -148,7 +148,6 @@ class StatCreate(StatBase):
 
 class StatRead(StatBase):
     id: int
-    created_at: datetime
 
     class Config:
         orm_mode = True

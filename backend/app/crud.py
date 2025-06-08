@@ -150,3 +150,15 @@ def create_tag_action_result(db: Session, tag: schemas.TagActionResultCreate):
     db.commit()
     db.refresh(db_tag)
     return db_tag
+
+
+# --- Stats CRUD ---
+def get_stat(db: Session, stat_id: int):
+    return db.query(models.Stat).filter(models.Stat.id == stat_id).first()
+
+def create_stat(db: Session, stat: schemas.StatCreate):
+    db_stat = models.Stat(**stat.dict())
+    db.add(db_stat)
+    db.commit()
+    db.refresh(db_stat)
+    return db_stat

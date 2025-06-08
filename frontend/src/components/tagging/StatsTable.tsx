@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 interface PlayerStats {
-  id: number;
+  player_id: number;
+  stat_id?: number; // Optional, if stats exist
   name: string;
   jersey_no: number;
   points: number;
@@ -29,7 +30,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
 
         // 2) Initialize each player with default zeros
         const initialStats: PlayerStats[] = playersData.map(player => ({
-          id: player.id,
+          player_id: player.id,
           name: `${player.first_name} ${player.last_name}`,
           jersey_no: player.jersey_no,
           points: 0,
@@ -44,9 +45,9 @@ const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
         // 3) For each player, fetch their stats if they exist
         const withStats = await Promise.all(initialStats.map(async p => {
           try {
-            const statRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${p.id}`);
+            const statRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${p.player_id}`);
             if (!statRes.ok) return p; // no stats recorded
-            const statData: { id: number; points: number; assists: number; rebounds: number; steals: number; blocks: number; turnovers: number; fouls: number } = await statRes.json();
+            const statData: { id: number; points: number; assists: number; rebounds: number; steals: number; blocks: number; turnovers: number; fouls: number} = await statRes.json();
             return {
               ...p,
               stat_id: statData.id,
@@ -56,7 +57,7 @@ const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
               steals: statData.steals,
               blocks: statData.blocks,
               turnovers: statData.turnovers,
-              fouls: statData.fouls,
+              fouls: statData.fouls
             };
           } catch {
             return p;
@@ -78,14 +79,14 @@ const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
 
     const player = updated[index];
     try {
-      await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${player.id}`, {
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${player.player_id}`, {
         method: 'PUT',
         headers: { 
             'Content-Type': 'application/json' 
         },
         body: JSON.stringify({
           practice_session_id: practiceSessionId,
-          player_id: player.id,
+          player_id: player.player_id,
           points: player.points,
           assists: player.assists,
           rebounds: player.rebounds,
