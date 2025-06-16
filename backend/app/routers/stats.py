@@ -14,4 +14,3 @@ router = APIRouter(
 @router.get("/dashboard", response_model=List[schemas.StatBase])
 def get_all_stats(db: Session = Depends(get_db)):
     return db.query(models.Stat).all()
-
