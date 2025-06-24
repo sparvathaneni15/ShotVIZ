@@ -22,3 +22,5 @@ gunicorn
 
 # AWS
 boto3                   # AWS SDK for Python
+
+pandas
