@@ -12,29 +12,31 @@ Welcome to the codebase for our basketball practice film analytics platform. Thi
 ⸻
 
 🚀 Workflow for Contributors
-	1.	Start from the latest dev
+1.	Start from the latest dev
 
+```
 git checkout dev
 git pull origin dev
 git checkout -b feature/your-feature-name
+```
 
+2.	Commit and push regularly while working
 
-	2.	Commit and push regularly while working
-
+```
 git add .
 git commit -m "Short but descriptive message"
 git push origin feature/your-feature-name
+```
 
-
-	3.	Open a Pull Request (PR) into dev
+3.	Open a Pull Request (PR) into dev
 	•	Go to GitHub > Pull Requests > New PR
 	•	Base branch: dev
 	•	Compare: feature/your-feature-name
 	•	Add a clear title and description
-	4.	Get your PR reviewed
+4.	Get your PR reviewed
 	•	Tag @project-lead or teammates for code review
 	•	Address any comments or requested changes
-	5.	Merge and clean up
+5.	Merge and clean up
 	•	Once approved, merge into dev (use “Squash and merge” if appropriate)
 	•	Delete your feature branch on GitHub
 
@@ -43,11 +45,11 @@ git push origin feature/your-feature-name
 🔁 Keeping Your Feature Branch Up to Date
 
 If dev has changed while you’re working:
-
+```
 git checkout feature/your-feature-name
 git fetch origin
 git merge origin/dev
-
+```
 Resolve conflicts if needed, then recommit and push.
 
 ⸻
