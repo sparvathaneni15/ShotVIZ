@@ -8,14 +8,14 @@ from app.config import settings
 
 def upload_to_s3(file: UploadFile) -> str:
     s3 = boto3.client("s3",
-                      aws_access_key_id=settings.aws_access_key_id,
-                      aws_secret_access_key=settings.aws_secret_access_key,
-                      region_name=settings.aws_region)
+                      aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                      aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                      region_name=settings.AWS_REGION)
 
     try:
-        s3.upload_fileobj(file.file, settings.s3_bucket_name, file.filename,
+        s3.upload_fileobj(file.file, settings.S3_BUCKET_NAME, file.filename,
                           ExtraArgs={"ContentType": file.content_type})
-        s3_url = f"https://{settings.s3_bucket_name}.s3.{settings.aws_region}.amazonaws.com/{file.filename}"
+        s3_url = f"https://{settings.S3_BUCKET_NAME}.s3.{settings.AWS_REGION}.amazonaws.com/{file.filename}"
         return s3_url
     except NoCredentialsError:
         raise HTTPException(status_code=500, detail="AWS credentials not found.")

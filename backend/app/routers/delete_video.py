@@ -14,8 +14,8 @@ class DeleteVideoRequest(BaseModel):
 @router.post("/delete_video")
 def delete_video(data: DeleteVideoRequest):
     s3 = boto3.client("s3")
-    bucket_name = settings.s3_bucket_name
-    region = settings.aws_region
+    bucket_name = settings.S3_BUCKET_NAME
+    region = settings.AWS_REGION
 
     # Extract the key from the full URL
     expected_prefix = f"https://{bucket_name}.s3.{region}.amazonaws.com/"

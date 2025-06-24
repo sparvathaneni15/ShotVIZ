@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS stats, tag_players, shot_details, tag_action_result, shots, results, roles, actions, practice_sessions, players, users CASCADE;
+
 -- Users (coaches/admin)
 CREATE TABLE users (
   id             SERIAL PRIMARY KEY,
@@ -52,15 +54,6 @@ CREATE TABLE shots (
     name           TEXT UNIQUE NOT NULL  -- e.g. "fadeaway", "spot-up"
 );
 
-CREATE TABLE shot_details (
-    id            SERIAL PRIMARY KEY,
-    tag_id        INTEGER NOT NULL REFERENCES tag_action_result(id) ON DELETE CASCADE,
-    player_id    INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE,
-    distance    NUMERIC NOT NULL,  -- e.g. 15.0 (feet)
-    made     BOOLEAN NOT NULL,  -- e.g. true/false
-    created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
 CREATE TABLE tag_action_result (
   id               SERIAL PRIMARY KEY,
   practice_sessions_id INTEGER NOT NULL REFERENCES practice_sessions(id) ON DELETE CASCADE,
@@ -71,6 +64,15 @@ CREATE TABLE tag_action_result (
   shot_id     INTEGER REFERENCES shots(id) ON DELETE CASCADE,
   occurred_at      TIMESTAMPTZ NOT NULL,  -- absolute timestamp in video/session
   created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE shot_details (
+    id            SERIAL PRIMARY KEY,
+    tag_id        INTEGER NOT NULL REFERENCES tag_action_result(id) ON DELETE CASCADE,
+    player_id    INTEGER NOT NULL REFERENCES players(id) ON DELETE CASCADE,
+    distance    NUMERIC NOT NULL,  -- e.g. 15.0 (feet)
+    made     BOOLEAN NOT NULL,  -- e.g. true/false
+    created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE tag_players (
