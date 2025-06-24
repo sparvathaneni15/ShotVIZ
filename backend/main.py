@@ -1,14 +1,14 @@
 import os
 
 # --- Import FastAPI and other dependencies ---
-from fastapi import FastAPI, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, Depends # type: ignore
+from fastapi.middleware.cors import CORSMiddleware # type: ignore
+from fastapi.staticfiles import StaticFiles # type: ignore
 # app.mount("/videos", StaticFiles(directory="uploaded_videos"), name="videos")
 
 # --- Import your DB and models so you can auto-create tables ---
 from app.dependencies import get_db
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session # type: ignore
 from app.database import engine, Base
 import app.models as models
 
@@ -69,7 +69,7 @@ async def root():
 
 # --- Optional: run with `python main.py` locally ---
 if __name__ == "__main__":
-    import uvicorn
+    import uvicorn # type: ignore
 
     uvicorn.run(
         "main:app",

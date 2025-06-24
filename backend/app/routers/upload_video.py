@@ -1,6 +1,6 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
-import boto3
-from botocore.exceptions import NoCredentialsError, ClientError
+from fastapi import APIRouter, UploadFile, File, HTTPException # type: ignore
+import boto3 # type: ignore
+from botocore.exceptions import NoCredentialsError, ClientError # type: ignore
 import os
 import shutil
 import subprocess

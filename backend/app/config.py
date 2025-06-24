@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings # type: ignore
 
 class Settings(BaseSettings):
     DATABASE_URL: str  # e.g. postgres://user:pass@host:port/dbname
