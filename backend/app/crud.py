@@ -153,11 +153,31 @@ def create_tag_action_result(db: Session, tag: schemas.TagActionResultCreate):
 
 
 # --- Stats CRUD ---
-def get_stat(db: Session, stat_id: int):
-    return db.query(models.Stat).filter(models.Stat.id == stat_id).first()
+def get_all_stats(db: Session):
+    return db.query(models.Stat).all()
 
-def create_stat(db: Session, stat: schemas.StatCreate):
+def get_stat(db: Session, practice_session_id: int, player_id: int):
+    return db.query(models.Stat).filter(
+        models.Stat.practice_session_id == practice_session_id,
+        models.Stat.player_id == player_id
+    )
+
+def create_stat(db: Session, stat: schemas.StatCreate, practice_session_id: int, player_id: int):
+    existing_stat = db.query(models.Stat).filter_by(
+        practice_session_id=practice_session_id,
+        player_id=player_id
+    ).first()
+
+    if existing_stat:
+        for field, value in stat.dict().items():
+            setattr(existing_stat, field, value)
+        db.commit()
+        db.refresh(existing_stat)
+        return existing_stat
+
     db_stat = models.Stat(**stat.dict())
+    db_stat.practice_session_id = practice_session_id
+    db_stat.player_id = player_id
     db.add(db_stat)
     db.commit()
     db.refresh(db_stat)

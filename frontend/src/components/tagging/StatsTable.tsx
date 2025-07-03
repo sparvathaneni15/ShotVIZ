@@ -21,53 +21,48 @@ interface StatsTableProps {
 const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
   const [players, setPlayers] = useState<PlayerStats[]>([]);
 
-  useEffect(() => {
-    const fetchPlayerStats = async () => {
-      try {
-        // 1) Fetch all players
-        const playersRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/players/`);
-        const playersData: Array<{ id: number; first_name: string; last_name: string; jersey_no: number }> = await playersRes.json();
+useEffect(() => {
+  const fetchPlayerStats = async () => {
+    try {
+      // Fetch all players
+      const playersRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/players/`);
+      const playersData: Array<{ id: number; first_name: string; last_name: string; jersey_no: number }> = await playersRes.json();
 
-        // 2) Initialize each player with default zeros
-        const initialStats: PlayerStats[] = playersData.map(player => ({
-          player_id: player.id,
-          name: `${player.first_name} ${player.last_name}`,
-          jersey_no: player.jersey_no,
-          points: 0,
-          assists: 0,
-          rebounds: 0,
-          steals: 0,
-          blocks: 0,
-          turnovers: 0,
-          fouls: 0,
-        }));
+      // Initialize each player with default zeros
+      let initialStats: PlayerStats[] = playersData.map(player => ({
+        player_id: player.id,
+        name: `${player.first_name} ${player.last_name}`,
+        jersey_no: player.jersey_no,
+        points: 0,
+        assists: 0,
+        rebounds: 0,
+        steals: 0,
+        blocks: 0,
+        turnovers: 0,
+        fouls: 0,
+      }));
 
-        // 3) For each player, fetch their stats if they exist
-        const withStats = await Promise.all(initialStats.map(async p => {
-          try {
-            const statRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${p.player_id}`);
-            if (!statRes.ok) return p; // no stats recorded
-            const statData: { id: number; points: number; assists: number; rebounds: number; steals: number; blocks: number; turnovers: number; fouls: number} = await statRes.json();
-            return {
-              ...p,
-              stat_id: statData.id,
-              points: statData.points,
-              assists: statData.assists,
-              rebounds: statData.rebounds,
-              steals: statData.steals,
-              blocks: statData.blocks,
-              turnovers: statData.turnovers,
-              fouls: statData.fouls
-            };
-          } catch {
-            return p;
-          }
-        }));
-        setPlayers(withStats);
-      } catch (error) {
-        console.error("Failed to fetch players", error);
-      }
-    };
+      // Check if stats exist for each player. If they do, fetch them and update the state with their values. Otherwise, keep default zeros.
+      const promises = initialStats.map(async p => {
+        try {
+          const statRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${p.player_id}`, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+          if (!statRes.ok) return p; // no stats recorded for this player
+          
+          const statData = await statRes.json();
+          return { ...p, ...statData };
+        } catch (error) {
+          console.log(`Error fetching stats for player ${p.player_id}: `, error);
+          console.log(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${p.player_id}`);
+          return p; // keep default values
+        }
+      });
+      
+      const withStats = await Promise.all(promises);
+      setPlayers(withStats);
+    } catch (error) {
+      console.log('Failed to fetch players: ', error);
+    }
+  };
     fetchPlayerStats();
   }, []);
 
