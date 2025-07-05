@@ -24,39 +24,48 @@ const StatsTable: React.FC<StatsTableProps> = ({ practiceSessionId }) => {
 useEffect(() => {
   const fetchPlayerStats = async () => {
     try {
-      // Fetch all players
       const playersRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/players/`);
       const playersData: Array<{ id: number; first_name: string; last_name: string; jersey_no: number }> = await playersRes.json();
 
-      // Initialize each player with default zeros
-      let initialStats: PlayerStats[] = playersData.map(player => ({
-        player_id: player.id,
-        name: `${player.first_name} ${player.last_name}`,
-        jersey_no: player.jersey_no,
-        points: 0,
-        assists: 0,
-        rebounds: 0,
-        steals: 0,
-        blocks: 0,
-        turnovers: 0,
-        fouls: 0,
-      }));
-
-      // Check if stats exist for each player. If they do, fetch them and update the state with their values. Otherwise, keep default zeros.
-      const promises = initialStats.map(async p => {
+      const promises = playersData.map(async player => {
         try {
-          const statRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${p.player_id}`, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
-          if (!statRes.ok) return p; // no stats recorded for this player
-          
+          const statRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${player.id}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+          });
+
+          if (!statRes.ok) throw new Error("Stat fetch failed");
+
           const statData = await statRes.json();
-          return { ...p, ...statData };
+          return {
+            player_id: player.id,
+            name: `${player.first_name} ${player.last_name}`,
+            jersey_no: player.jersey_no,
+            points: statData.points,
+            assists: statData.assists,
+            rebounds: statData.rebounds,
+            steals: statData.steals,
+            blocks: statData.blocks,
+            turnovers: statData.turnovers,
+            fouls: statData.fouls,
+          };
         } catch (error) {
-          console.log(`Error fetching stats for player ${p.player_id}: `, error);
-          console.log(`${import.meta.env.VITE_BACKEND_URL}/stats/${practiceSessionId}/${p.player_id}`);
-          return p; // keep default values
+          console.error(`Failed to fetch stat for player ${player.id}:`, error);
+          return {
+            player_id: player.id,
+            name: `${player.first_name} ${player.last_name}`,
+            jersey_no: player.jersey_no,
+            points: 0,
+            assists: 0,
+            rebounds: 0,
+            steals: 0,
+            blocks: 0,
+            turnovers: 0,
+            fouls: 0,
+          };
         }
       });
-      
+
       const withStats = await Promise.all(promises);
       setPlayers(withStats);
     } catch (error) {

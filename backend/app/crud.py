@@ -160,7 +160,7 @@ def get_stat(db: Session, practice_session_id: int, player_id: int):
     return db.query(models.Stat).filter(
         models.Stat.practice_session_id == practice_session_id,
         models.Stat.player_id == player_id
-    )
+    ).first()
 
 def create_stat(db: Session, stat: schemas.StatCreate, practice_session_id: int, player_id: int):
     existing_stat = db.query(models.Stat).filter_by(
