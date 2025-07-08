@@ -1,9 +1,7 @@
-
-
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
-import boto3
-from botocore.exceptions import ClientError
+from fastapi import APIRouter, HTTPException # type: ignore
+from pydantic import BaseModel # type: ignore
+import boto3 # type: ignore
+from botocore.exceptions import ClientError # type: ignore
 from app.config import settings
 
 router = APIRouter()
