@@ -1,4 +1,4 @@
-# 🏀 Practice Film Analytics — Developer Onboarding
+# 🏀 ShotVIZ— Developer Onboarding
 
 Welcome to the **Practice Film Analytics** project! This guide provides an overview of the technologies in use and the key features of the application so you can quickly get up to speed.
 
