@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
     >
       <div className="flex items-center space-x-3 mb-8">
         <ShieldIcon className="text-[#2D3092] text-2xl" />
-        <span className="text-gray-900 dark:text-white font-bold">UCSD Athletics</span>
+        <span className="text-gray-900 dark:text-white font-bold">ShotVIZ</span>
       </div>
 
       <div className="space-y-2">

@@ -19,23 +19,6 @@ class PracticeSessionRead(PracticeSessionBase):
         orm_mode = True
 
 
-# --- User Schemas ---
-class UserBase(BaseModel):
-    email: EmailStr
-    name: str
-
-class UserCreate(UserBase):
-    password: str
-
-class UserRead(UserBase):
-    id: int
-    created_at: datetime
-    practice_sessions: List[PracticeSessionRead] = []
-
-    class Config:
-        orm_mode = True
-
-
 # --- Player Schemas ---
 class PlayerBase(BaseModel):
     jersey_no: Optional[int]
@@ -54,50 +37,6 @@ class PlayerRead(PlayerBase):
     class Config:
         orm_mode = True
 
-
-# --- Role Type Schemas ---
-class RoleBase(BaseModel):
-    name: str
-    description: Optional[str]
-
-class RoleTypeCreate(RoleBase):
-    pass
-
-class RoleTypeRead(RoleBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
-# --- Action Name Schemas ---
-class ActionBase(BaseModel):
-    name: str
-
-class ActionNameCreate(ActionBase):
-    pass
-
-class ActionNameRead(ActionBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
-# --- Result Name Schemas ---
-class ResultBase(BaseModel):
-    name: str
-
-class ResultNameCreate(ResultBase):
-    pass
-
-class ResultNameRead(ResultBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
 # --- Shot Name Schemas ---
 class ShotBase(BaseModel):
     name: str
@@ -111,25 +50,6 @@ class ShotNameRead(ShotBase):
     class Config:
         orm_mode = True
 
-# --- Tag Action Result Schemas ---
-class TagActionResultBase(BaseModel):
-    practice_sessions_id: int
-    start_time: float
-    end_time: float
-    action_id: int
-    result_id: int
-    shot_id: Optional[int]
-    occurred_at: datetime
-
-class TagActionResultCreate(TagActionResultBase):
-    pass
-
-class TagActionResultRead(TagActionResultBase):
-    id: int
-    created_at: datetime
-
-    class Config:
-        orm_mode = True
 
 # --- Stat Schemas ---
 class StatBase(BaseModel):

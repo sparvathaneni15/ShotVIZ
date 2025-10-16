@@ -13,24 +13,14 @@ from app.database import engine, Base
 import app.models as models
 
 # --- Import your routers (each handles one slice of your API) ---
-from app.routers import (users, 
-                         players, 
-                         practice_sessions,
-                         shots,
-                         tag_action_result,
-                         actions,
-                         results,
-                         roles,
-                         stats,
-                         upload_video,
-                         delete_video)
+
 
 # --- Create all tables (only for dev; in prod use migrations) ---
 Base.metadata.create_all(bind=engine)
 
 # --- Instantiate the app ---
 app = FastAPI(
-    title="Practice Analytics API",
+    title="ShotVIZ API",
     version="0.1.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -49,17 +39,7 @@ app.add_middleware(
 )
 
 # --- Mount each router on its path prefix ---
-app.include_router(users.router)
-app.include_router(players.router)
-app.include_router(practice_sessions.router)
-app.include_router(actions.router)
-app.include_router(results.router)
-app.include_router(shots.router)
-app.include_router(roles.router)
-app.include_router(tag_action_result.router)
-app.include_router(upload_video.router)
-app.include_router(stats.router)
-app.include_router(delete_video.router)
+
 
 # --- A simple health-check or root endpoint ---
 @app.get("/", summary="Service health check")

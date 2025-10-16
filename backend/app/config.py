@@ -7,12 +7,20 @@ from pydantic import validator
 load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
 class Settings(BaseSettings):
     DATABASE_URL: str 
+    MONGO_URL : str
     BACKEND_CORS_ORIGINS: list[str]
     S3_BUCKET_NAME: str
     AWS_REGION: str
     AWS_ACCESS_KEY_ID: str
     AWS_SECRET_ACCESS_KEY: str
     VITE_S3_BUCKET_URL: str
+    POSTGRES_DB : str
+    POSTGRES_USER : str
+    POSTGRES_PASSWORD : str
+    MONGO_DB : str
+    MONGO_ROOT_USER : str
+    MONGO_ROOT_PASSWORD : str
+
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def parse_origins(cls, v):

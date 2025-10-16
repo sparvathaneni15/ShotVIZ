@@ -1,15 +1,29 @@
+name: shotviz-dbs
 services:
-  db:
-    image: postgres
-    container_name: practice-stats-db
-    restart: always
-    env_file:
-      - .env
+  mongo:
+    image: mongo:7
+    container_name: shotviz-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: shotviz
+      MONGO_INITDB_ROOT_PASSWORD: shotviz
+      MONGO_INITDB_DATABASE: devpassword
     ports:
-      - "5433:5432"
+      - "27017:27017"  # host -> container
     volumes:
-      - pgdata:/var/lib/postgresql/data
-      - ./db:/docker-entrypoint-initdb.d
-
+      - mongo_data:/data/db
+      - ./db/mongodb:/docker-entrypoint-initdb.d   # *.js or *.sh run on first start
+  postgres:
+    image: postgres:16
+    container_name: shotviz-postgres
+    environment:
+      POSTGRES_DB: shotviz
+      POSTGRES_USER: shotviz
+      POSTGRES_PASSWORD: devpassword
+    ports:
+      - "5432:5432"  # host -> container
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./db/postgresql:/docker-entrypoint-initdb.d # *.sql run on first start
 volumes:
-  pgdata:
+  mongo_data:
+  pg_data:
