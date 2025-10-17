@@ -1,3 +1,5 @@
 *.env
 film-database/
-./backend/docker-compose.yml
+./backend/docker-compose.yml__pycache__/
+*.py[cod]
+*.class
