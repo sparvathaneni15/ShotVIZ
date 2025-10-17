@@ -1,3 +1,5 @@
 *.env
 film-database/
-/backend/app/load_to_rds.py
+/backend/app/load_to_rds.py__pycache__/
+*.py[cod]
+*.class
